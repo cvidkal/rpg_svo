@@ -1,0 +1,7 @@
+windows_project/slam/.vs/
+windows_project/slam/fast/x64/
+windows_project/slam/slam/x64/
+windows_project/slam/sophus/x64/
+windows_project/slam/test/x64/
+windows_project/slam/vikit/x64/
+*.exe

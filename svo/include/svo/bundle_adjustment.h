@@ -34,7 +34,7 @@ typedef g2o::VertexSBAPointXYZ g2oPoint;
 
 class Frame;
 class Point;
-class Feature;
+struct Feature;
 class Map;
 
 /// Local, global and 2-view bundle adjustment with g2o

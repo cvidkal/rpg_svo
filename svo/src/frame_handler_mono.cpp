@@ -22,7 +22,6 @@
 #include <svo/point.h>
 #include <svo/pose_optimizer.h>
 #include <svo/sparse_img_align.h>
-#include <vikit/performance_monitor.h>
 #include <svo/depth_filter.h>
 #ifdef USE_BUNDLE_ADJUSTMENT
 #include <svo/bundle_adjustment.h>
@@ -44,8 +43,8 @@ void FrameHandlerMono::initialize()
   feature_detection::DetectorPtr feature_detector(
       new feature_detection::FastDetector(
           cam_->width(), cam_->height(), Config::gridSize(), Config::nPyrLevels()));
-  DepthFilter::callback_t depth_filter_cb = boost::bind(
-      &MapPointCandidates::newCandidatePoint, &map_.point_candidates_, _1, _2);
+  DepthFilter::callback_t depth_filter_cb = std::bind(
+      &MapPointCandidates::newCandidatePoint, &map_.point_candidates_, placeholders::_1, placeholders::_2);
   depth_filter_ = new DepthFilter(feature_detector, depth_filter_cb);
   depth_filter_->startThread();
 }
@@ -318,8 +317,8 @@ void FrameHandlerMono::setCoreKfs(size_t n_closest)
 {
   size_t n = min(n_closest, overlap_kfs_.size()-1);
   std::partial_sort(overlap_kfs_.begin(), overlap_kfs_.begin()+n, overlap_kfs_.end(),
-                    boost::bind(&pair<FramePtr, size_t>::second, _1) >
-                    boost::bind(&pair<FramePtr, size_t>::second, _2));
+                    [](pair<FramePtr, size_t>&a, 
+						pair<FramePtr, size_t>&b) {return a.second < b.second; });
   std::for_each(overlap_kfs_.begin(), overlap_kfs_.end(), [&](pair<FramePtr,size_t>& i){ core_kfs_.insert(i.first); });
 }
 

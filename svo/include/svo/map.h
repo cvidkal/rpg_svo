@@ -18,14 +18,13 @@
 #define SVO_MAP_H_
 
 #include <queue>
-#include <boost/noncopyable.hpp>
-#include <boost/thread.hpp>
 #include <svo/global.h>
+#include <mutex>
 
 namespace svo {
 
 class Point;
-class Feature;
+struct Feature;
 class Seed;
 
 /// Container for converged 3D points that are not already assigned to two keyframes.
@@ -37,7 +36,7 @@ public:
 
   /// The depth-filter is running in a parallel thread and fills the canidate list.
   /// This mutex controls concurrent access to point_candidates.
-  boost::mutex mut_;
+  std::mutex mut_;
 
   /// Candidate points are created from converged seeds.
   /// Until the next keyframe, these points can be used for reprojection and pose optimization.
@@ -68,7 +67,7 @@ public:
 };
 
 /// Map object which saves all keyframes which are in a map.
-class Map : boost::noncopyable
+class Map
 {
 public:
   list< FramePtr > keyframes_;          //!< List of keyframes in the map.

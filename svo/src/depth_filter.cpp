@@ -18,8 +18,6 @@
 #include <vikit/math_utils.h>
 #include <vikit/abstract_camera.h>
 #include <vikit/vision.h>
-#include <boost/bind.hpp>
-#include <boost/math/distributions/normal.hpp>
 #include <svo/global.h>
 #include <svo/depth_filter.h>
 #include <svo/frame.h>
@@ -28,6 +26,8 @@
 #include <svo/matcher.h>
 #include <svo/config.h>
 #include <svo/feature_detection.h>
+#include <thread>
+#include <random>
 
 namespace svo {
 
@@ -63,7 +63,7 @@ DepthFilter::~DepthFilter()
 
 void DepthFilter::startThread()
 {
-  thread_ = new boost::thread(&DepthFilter::updateSeedsLoop, this);
+  thread_ = new std::thread(&DepthFilter::updateSeedsLoop, this);
 }
 
 void DepthFilter::stopThread()
@@ -73,7 +73,6 @@ void DepthFilter::stopThread()
   {
     SVO_INFO_STREAM("DepthFilter interrupt and join thread... ");
     seeds_updating_halt_ = true;
-    thread_->interrupt();
     thread_->join();
     thread_ = NULL;
   }
@@ -168,7 +167,8 @@ void DepthFilter::reset()
 
 void DepthFilter::updateSeedsLoop()
 {
-  while(!boost::this_thread::interruption_requested())
+  //while(!boost::this_thread::interruption_requested())
+  while (true)
   {
     FramePtr frame;
     {
@@ -306,15 +306,22 @@ void DepthFilter::getSeedsCopy(const FramePtr& frame, std::list<Seed>& seeds)
   }
 }
 
+float normal_pdf(float x, float m, float s)
+{
+	static const float inv_sqrt_2pi = 0.3989422804014327;
+	float a = (x - m) / s;
+
+	return inv_sqrt_2pi / s * std::exp(-0.5f * a * a);
+}
+
 void DepthFilter::updateSeed(const float x, const float tau2, Seed* seed)
 {
   float norm_scale = sqrt(seed->sigma2 + tau2);
   if(std::isnan(norm_scale))
     return;
-  boost::math::normal_distribution<float> nd(seed->mu, norm_scale);
   float s2 = 1./(1./seed->sigma2 + 1./tau2);
   float m = s2*(seed->mu/seed->sigma2 + x/tau2);
-  float C1 = seed->a/(seed->a+seed->b) * boost::math::pdf(nd, x);
+  float C1 = seed->a/(seed->a+seed->b) * normal_pdf(x,seed->mu,norm_scale);
   float C2 = seed->b/(seed->a+seed->b) * 1./seed->z_range;
   float normalization_constant = C1 + C2;
   C1 /= normalization_constant;

@@ -18,7 +18,6 @@
 #define SVO_SPARSE_IMG_ALIGN_H_
 
 #include <vikit/nlls_solver.h>
-#include <vikit/performance_monitor.h>
 #include <svo/global.h>
 
 namespace vk {
@@ -27,7 +26,7 @@ class AbstractCamera;
 
 namespace svo {
 
-class Feature;
+struct Feature;
 
 /// Optimize the pose of the frame by minimizing the photometric error of feature patches.
 class SparseImgAlign : public vk::NLLSSolver<6, SE3>

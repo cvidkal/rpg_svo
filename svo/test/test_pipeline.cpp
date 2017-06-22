@@ -29,6 +29,7 @@
 #include <sophus/se3.h>
 #include <iostream>
 #include "test_utils.h"
+#include <iomanip>
 
 namespace svo {
 

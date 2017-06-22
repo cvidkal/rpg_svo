@@ -18,17 +18,15 @@
 #define SVO_DEPTH_FILTER_H_
 
 #include <queue>
-#include <boost/thread.hpp>
-#include <boost/function.hpp>
-#include <vikit/performance_monitor.h>
 #include <svo/global.h>
 #include <svo/feature_detection.h>
 #include <svo/matcher.h>
+#include <mutex>
 
 namespace svo {
 
 class Frame;
-class Feature;
+struct Feature;
 class Point;
 
 /// A seed is a probabilistic depth estimate for a single pixel.
@@ -61,8 +59,8 @@ class DepthFilter
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  typedef boost::unique_lock<boost::mutex> lock_t;
-  typedef boost::function<void ( Point*, double )> callback_t;
+  typedef std::unique_lock<std::mutex> lock_t;
+  typedef std::function<void ( Point*, double )> callback_t;
 
   /// Depth-filter config parameters
   struct Options
@@ -138,17 +136,17 @@ protected:
   feature_detection::DetectorPtr feature_detector_;
   callback_t seed_converged_cb_;
   std::list<Seed> seeds_;
-  boost::mutex seeds_mut_;
+  std::mutex seeds_mut_;
   bool seeds_updating_halt_;            //!< Set this value to true when seeds updating should be interrupted.
-  boost::thread* thread_;
+  std::thread* thread_;
   std::queue<FramePtr> frame_queue_;
-  boost::mutex frame_queue_mut_;
-  boost::condition_variable frame_queue_cond_;
+  std::mutex frame_queue_mut_;
+  std::condition_variable frame_queue_cond_;
   FramePtr new_keyframe_;               //!< Next keyframe to extract new seeds.
   bool new_keyframe_set_;               //!< Do we have a new keyframe to process?.
   double new_keyframe_min_depth_;       //!< Minimum depth in the new keyframe. Used for range in new seeds.
   double new_keyframe_mean_depth_;      //!< Maximum depth in the new keyframe. Used for range in new seeds.
-  vk::PerformanceMonitor permon_;       //!< Separate performance monitor since the DepthFilter runs in a parallel thread.
+  //vk::PerformanceMonitor permon_;       //!< Separate performance monitor since the DepthFilter runs in a parallel thread.
   Matcher matcher_;
 
   /// Initialize new seeds from a frame.

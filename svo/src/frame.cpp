@@ -19,10 +19,8 @@
 #include <svo/feature.h>
 #include <svo/point.h>
 #include <svo/config.h>
-#include <boost/bind.hpp>
 #include <vikit/math_utils.h>
 #include <vikit/vision.h>
-#include <vikit/performance_monitor.h>
 #include <fast/fast.h>
 
 namespace svo {

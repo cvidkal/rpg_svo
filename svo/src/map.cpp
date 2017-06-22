@@ -19,7 +19,6 @@
 #include <svo/point.h>
 #include <svo/frame.h>
 #include <svo/feature.h>
-#include <boost/bind.hpp>
 
 namespace svo {
 
@@ -137,8 +136,7 @@ FramePtr Map::getClosestKeyframe(const FramePtr& frame) const
 
 
   // Sort KFs with overlap according to their closeness
-  close_kfs.sort(boost::bind(&std::pair<FramePtr, double>::second, _1) <
-                 boost::bind(&std::pair<FramePtr, double>::second, _2));
+  close_kfs.sort([](std::pair<FramePtr, double>&a, std::pair<FramePtr, double>&b) {return a.second < b.second; });
 
   if(close_kfs.front().first != frame)
     return close_kfs.front().first;
@@ -213,13 +211,13 @@ MapPointCandidates::~MapPointCandidates()
 void MapPointCandidates::newCandidatePoint(Point* point, double depth_sigma2)
 {
   point->type_ = Point::TYPE_CANDIDATE;
-  boost::unique_lock<boost::mutex> lock(mut_);
+  std::unique_lock<std::mutex> lock(mut_);
   candidates_.push_back(PointCandidate(point, point->obs_.front()));
 }
 
 void MapPointCandidates::addCandidatePointToFrame(FramePtr frame)
 {
-  boost::unique_lock<boost::mutex> lock(mut_);
+  std::unique_lock<std::mutex> lock(mut_);
   PointCandidateList::iterator it=candidates_.begin();
   while(it != candidates_.end())
   {
@@ -238,7 +236,7 @@ void MapPointCandidates::addCandidatePointToFrame(FramePtr frame)
 
 bool MapPointCandidates::deleteCandidatePoint(Point* point)
 {
-  boost::unique_lock<boost::mutex> lock(mut_);
+  std::unique_lock<std::mutex> lock(mut_);
   for(auto it=candidates_.begin(), ite=candidates_.end(); it!=ite; ++it)
   {
     if(it->first == point)
@@ -253,7 +251,7 @@ bool MapPointCandidates::deleteCandidatePoint(Point* point)
 
 void MapPointCandidates::removeFrameCandidates(FramePtr frame)
 {
-  boost::unique_lock<boost::mutex> lock(mut_);
+  std::unique_lock<std::mutex> lock(mut_);
   auto it=candidates_.begin();
   while(it!=candidates_.end())
   {
@@ -269,7 +267,7 @@ void MapPointCandidates::removeFrameCandidates(FramePtr frame)
 
 void MapPointCandidates::reset()
 {
-  boost::unique_lock<boost::mutex> lock(mut_);
+  std::unique_lock<std::mutex> lock(mut_);
   std::for_each(candidates_.begin(), candidates_.end(), [&](PointCandidate& c){
     delete c.first;
     delete c.second;
