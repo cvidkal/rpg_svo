@@ -43,7 +43,7 @@ void FrameHandlerMono::initialize()
 {
   feature_detection::DetectorPtr feature_detector(
       new feature_detection::FastDetector(
-          cam_->width(), cam_->height(), Config::gridSize(), Config::nPyrLevels()));
+          cam_->width(), cam_->height(), Config::gridSize(), PYR_USED));
   DepthFilter::callback_t depth_filter_cb = std::bind(
       &MapPointCandidates::newCandidatePoint, &map_.point_candidates_, placeholders::_1, placeholders::_2);
   depth_filter_ = new DepthFilter(feature_detector, depth_filter_cb);

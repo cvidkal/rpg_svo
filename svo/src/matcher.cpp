@@ -156,7 +156,7 @@ bool Matcher::findMatchDirect(
       *ref_ftr_->frame->cam_, *cur_frame.cam_, ref_ftr_->px, ref_ftr_->f,
       (ref_ftr_->frame->pos() - pt.pos_).norm(),
       cur_frame.T_f_w_ * ref_ftr_->frame->T_f_w_.inverse(), ref_ftr_->level, A_cur_ref_);
-  search_level_ = warp::getBestSearchLevel(A_cur_ref_, Config::nPyrLevels()-1);
+  search_level_ = warp::getBestSearchLevel(A_cur_ref_, PYR_USED-1);
   warp::warpAffine(A_cur_ref_, ref_ftr_->frame->img_pyr_[ref_ftr_->level], ref_ftr_->px,
                    ref_ftr_->level, search_level_, halfpatch_size_+1, patch_with_border_);
   createPatchFromPatchWithBorder();
@@ -226,7 +226,7 @@ bool slam::Matcher::findEpipolarMatchDirect(
 		}
 	}
 
-	search_level_ = warp::getBestSearchLevel(A_cur_ref_, Config::nPyrLevels() - 1);
+	search_level_ = warp::getBestSearchLevel(A_cur_ref_, PYR_USED - 1);
 
 	// Find length of search range on epipolar line
 	Vector2d px_A(cur_frame.cam_->world2cam(A));

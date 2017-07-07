@@ -35,12 +35,14 @@ struct Feature
   FeatureType type;     //!< Type can be corner or edgelet.
   Frame* frame;         //!< Pointer to frame in which the feature was detected.
   Vector2d px;          //!< Coordinates in pixels on pyramid level 0.
+  Vector2d px_rec;		//!< Coordinates in pixles on recitfy plane.
   Vector3d f;           //!< Unit-bearing vector of the feature.
   int level;            //!< Image pyramid level where feature was extracted.
   Point* point;         //!< Pointer to 3D point which corresponds to the feature.
   Vector2d grad;        //!< Dominant gradient direction for edglets, normalized.
-  EIGEN_ALIGN16 float patch_[PATCH_SIZE]; //patch used for tracking
+  EIGEN_ALIGN16 float patch_[PYR_USED][PATCH_SIZE]; //patch used for tracking
   EIGEN_ALIGN16 float warped_patch_[PATCH_SIZE];
+  
 
   Feature(Frame* _frame, const Vector2d& _px, int _level) :
     type(CORNER),

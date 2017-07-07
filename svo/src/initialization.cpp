@@ -121,7 +121,7 @@ void detectFeatures(
 {
   Features new_features;
   feature_detection::FastDetector detector(
-      frame->img().cols, frame->img().rows, Config::gridSize(), Config::nPyrLevels());
+      frame->img().cols, frame->img().rows, Config::gridSize(), PYR_USED);
   detector.detect(frame.get(), frame->img_pyr_, Config::triangMinCornerScore(), new_features);
 
   // now for all maximum corners, initialize a new seed

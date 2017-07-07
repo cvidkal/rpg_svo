@@ -54,7 +54,7 @@ void Frame::initFrame(const cv::Mat& img)
   std::for_each(key_pts_.begin(), key_pts_.end(), [&](Feature* ftr){ ftr=NULL; });
 
   // Build Image Pyramid
-  frame_utils::createImgPyramid(img, max(Config::nPyrLevels(), Config::kltMaxLevel()+1), img_pyr_);
+  frame_utils::createImgPyramid(img, PYR_USED, img_pyr_);
 }
 
 void Frame::setKeyframe()
