@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <svo/config.h>
 #include <svo/frame.h>
@@ -23,7 +24,7 @@
 #include <vikit/math_utils.h>
 #include <vikit/homography.h>
 
-namespace svo {
+namespace slam {
 namespace initialization {
 
 InitResult KltHomographyInit::addFirstFrame(FramePtr frame_ref)
@@ -44,6 +45,15 @@ InitResult KltHomographyInit::addSecondFrame(FramePtr frame_cur)
 {
   trackKlt(frame_ref_, frame_cur, px_ref_, px_cur_, f_ref_, f_cur_, disparities_);
   SVO_INFO_STREAM("Init: KLT tracked "<< disparities_.size() <<" features");
+
+  cv::Mat draw = frame_cur->img().clone();
+  for (size_t i = 0; i < px_ref_.size(); i++)
+  {
+	  cv::line(draw, px_ref_[i], px_cur_[i], CV_RGB(255, 0, 0));
+  }
+  imshow("draw", draw);
+  cv::waitKey(1);
+
 
   if(disparities_.size() < Config::initMinTracked())
     return FAILURE;
@@ -196,4 +206,4 @@ void computeHomography(
 
 
 } // namespace initialization
-} // namespace svo
+} // namespace slam

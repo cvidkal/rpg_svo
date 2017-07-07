@@ -19,7 +19,7 @@
 
 #include <svo/global.h>
 
-namespace svo {
+namespace slam {
 
 class FrameHandlerMono;
 
@@ -30,7 +30,7 @@ enum InitResult { FAILURE, NO_KEYFRAME, SUCCESS };
 
 /// Tracks features using Lucas-Kanade tracker and then estimates a homography.
 class KltHomographyInit {
-  friend class svo::FrameHandlerMono;
+  friend class slam::FrameHandlerMono;
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -78,6 +78,6 @@ void computeHomography(
     SE3& T_cur_from_ref);
 
 } // namespace initialization
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_INITIALIZATION_H

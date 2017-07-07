@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <cstdlib>
 #include <vikit/abstract_camera.h>
@@ -26,7 +27,7 @@
 #include <svo/config.h>
 #include <svo/feature_alignment.h>
 
-namespace svo {
+namespace slam {
 	bool depthFromTriangulation(
 		const SE3& T_search_ref,
 		const Vector3d& f_ref,
@@ -185,12 +186,12 @@ bool Matcher::findMatchDirect(
 
 
 
-} // namespace svo
+} // namespace slam
 
 
 
 
-bool svo::Matcher::findEpipolarMatchDirect(
+bool slam::Matcher::findEpipolarMatchDirect(
 	const Frame& ref_frame,
 	const Frame& cur_frame,
 	const Feature& ref_ftr,

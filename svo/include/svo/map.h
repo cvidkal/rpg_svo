@@ -21,7 +21,7 @@
 #include <svo/global.h>
 #include <mutex>
 
-namespace svo {
+namespace slam {
 
 class Point;
 struct Feature;
@@ -130,6 +130,6 @@ void frameValidation(Frame* frame, int id);
 void pointValidation(Point* point, int id);
 
 } // namespace map_debug
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_MAP_H_

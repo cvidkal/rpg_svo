@@ -27,7 +27,7 @@ class VertexSE3Expmap;
 }
 typedef g2o::VertexSE3Expmap g2oFrameSE3;
 
-namespace svo {
+namespace slam {
 
 class Point;
 struct Feature;
@@ -148,6 +148,6 @@ void createImgPyramid(const cv::Mat& img_level_0, int n_levels, ImgPyr& pyr);
 bool getSceneDepth(const Frame& frame, double& depth_mean, double& depth_min);
 
 } // namespace frame_utils
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_FRAME_H_

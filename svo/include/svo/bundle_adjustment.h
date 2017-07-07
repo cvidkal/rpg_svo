@@ -26,7 +26,7 @@ class VertexSE3Expmap;
 class VertexSBAPointXYZ;
 }
 
-namespace svo {
+namespace slam {
 
 typedef g2o::EdgeProjectXYZ2UV g2oEdgeSE3;
 typedef g2o::VertexSE3Expmap g2oFrameSE3;
@@ -104,6 +104,6 @@ g2oEdgeSE3* createG2oEdgeSE3(
     double weight = 1);
 
 } // namespace ba
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_BUNDLE_ADJUSTMENT_H_

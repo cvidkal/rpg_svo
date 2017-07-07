@@ -23,7 +23,7 @@
 #include <svo/matcher.h>
 #include <mutex>
 
-namespace svo {
+namespace slam {
 
 class Frame;
 struct Feature;
@@ -75,7 +75,7 @@ public:
     Options()
     : check_ftr_angle(false),
       epi_search_1d(false),
-      verbose(false),
+      verbose(true),
       use_photometric_disparity_error(false),
       max_n_kfs(3),
       sigma_i_sq(5e-4),
@@ -162,6 +162,6 @@ protected:
   void updateSeedsLoop();
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_DEPTH_FILTER_H_

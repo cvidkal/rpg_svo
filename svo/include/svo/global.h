@@ -68,7 +68,7 @@ EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector2d)
     } while(0)
 #endif
 
-namespace svo
+namespace slam
 {
   using namespace Eigen;
   using namespace Sophus;
@@ -95,6 +95,6 @@ namespace svo
 
   class Frame;
   typedef std::shared_ptr<Frame> FramePtr;
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_GLOBAL_H_

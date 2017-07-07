@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #ifdef __SSE2__
 #include <emmintrin.h>
@@ -22,7 +23,7 @@
 #endif
 #include <svo/feature_alignment.h>
 
-namespace svo {
+namespace slam {
 namespace feature_alignment {
 
 #define SUBPIX_VERBOSE 0
@@ -598,4 +599,4 @@ bool align2D_NEON (
 }
 
 } // namespace feature_alignment
-} // namespace svo
+} // namespace slam

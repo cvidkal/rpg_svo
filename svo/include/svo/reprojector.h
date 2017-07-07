@@ -24,7 +24,7 @@ namespace vk {
 class AbstractCamera;
 }
 
-namespace svo {
+namespace slam {
 
 class Map;
 class Point;
@@ -96,6 +96,6 @@ private:
   bool reprojectPoint(FramePtr frame, Point* point);
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_REPROJECTION_H_

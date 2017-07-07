@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <vikit/abstract_camera.h>
 #include <stdlib.h>
@@ -25,7 +26,7 @@
 #include <svo/map.h>
 #include <svo/point.h>
 
-namespace svo
+namespace slam
 {
 
 // definition of global and static variables which were declared in the header
@@ -40,7 +41,8 @@ FrameHandlerBase::FrameHandlerBase() :
   acc_frame_timings_(10),
   acc_num_obs_(10),
   num_obs_last_(0),
-  tracking_quality_(TRACKING_INSUFFICIENT)
+  tracking_quality_(TRACKING_INSUFFICIENT),
+	internalID_(0)
 {
 #ifdef SVO_TRACE
   // Initialize Performance Monitor
@@ -192,4 +194,4 @@ void FrameHandlerBase::optimizeStructure(
 }
 
 
-} // namespace svo
+} // namespace slam

@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <algorithm>
 #include <svo/sparse_img_align.h>
@@ -24,7 +25,7 @@
 #include <vikit/vision.h>
 #include <vikit/math_utils.h>
 
-namespace svo {
+namespace slam {
 
 SparseImgAlign::SparseImgAlign(
     int max_level, int min_level, int n_iter,
@@ -38,6 +39,7 @@ SparseImgAlign::SparseImgAlign(
   method_ = method;
   verbose_ = verbose;
   eps_ = 0.000001;
+  setRobustCostFunction(MADScale, HuberWeight);
 }
 
 size_t SparseImgAlign::run(FramePtr ref_frame, FramePtr cur_frame)
@@ -270,5 +272,5 @@ void SparseImgAlign::finishIteration()
   }
 }
 
-} // namespace svo
+} // namespace slam
 

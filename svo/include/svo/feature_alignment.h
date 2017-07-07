@@ -19,7 +19,7 @@
 
 #include <svo/global.h>
 
-namespace svo {
+namespace slam {
 
 /// Subpixel refinement of a reference feature patch with the current image.
 /// Implements the inverse-compositional approach (see "Lucas-Kanade 20 Years on"
@@ -58,6 +58,6 @@ bool align2D_NEON(
     Vector2d& cur_px_estimate);
 
 } // namespace feature_alignment
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_FEATURE_ALIGNMENT_H_

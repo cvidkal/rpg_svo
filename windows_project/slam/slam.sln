@@ -16,6 +16,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sophus", "sophus\sophus.vcxproj", "{6F454100-8B36-46C4-BD93-229A5096F7F8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{87DE7B37-1AD0-48EB-A060-5C46836CDAA3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9D1A1EF3-E5CD-4066-8699-EBD07393CAD2} = {9D1A1EF3-E5CD-4066-8699-EBD07393CAD2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

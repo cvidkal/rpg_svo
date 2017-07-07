@@ -22,8 +22,9 @@
 #include <svo/frame_handler_base.h>
 #include <svo/reprojector.h>
 #include <svo/initialization.h>
+#include "ImuEstimator.h"
 
-namespace svo {
+namespace slam {
 
 /// Monocular Visual Odometry Pipeline as described in the SVO paper.
 class FrameHandlerMono : public FrameHandlerBase
@@ -60,6 +61,9 @@ public:
       const cv::Mat& img,
       const double timestamp);
 
+  void motionPrediction()override;
+
+
 protected:
   vk::AbstractCamera* cam_;                     //!< Camera model, can be ATAN, Pinhole or Ocam (see vikit).
   Reprojector reprojector_;                     //!< Projects points from other keyframes into the current frame
@@ -94,8 +98,47 @@ protected:
   virtual bool needNewKf(double scene_depth_mean);
 
   void setCoreKfs(size_t n_closest);
+
+  void preProcessIMU();
+
+#if USE_IMU
+  bool mbUseImu;
+  bool mbUseTrackingFusion;
+  ImuBuffer* mpImuBuffer;
+
+  // 
+  //Eigen::Matrix3d mRci;
+  Eigen::Vector3d mPci;
+
+  // delta pose
+  DeltaPose mDeltaPose;
+  // inverse delta pose
+  DeltaPose mInvDeltaPose;
+
+  // vision pose
+  VisionPose mVisionPose;
+
+  ImuEstimator* mpImuEstimator;
+
+  bool mbHaveEstimateScale;
+  double mScale;
+  Eigen::Vector3d mGravity;
+  Eigen::Vector3d mVelocity;
+
+  // tightly coupled variables
+  //ImuTerm mImuTerm;
+
+  // predict pose and velocity
+  Sophus::SE3 mPredictedTcr;
+  Eigen::Vector3d mPredictedVel;
+
+#if USE_TRACKING_FUSION
+  TrackingFilter* mpTrackingFilter;
+#endif
+
+#endif
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_FRAME_HANDLER_H_

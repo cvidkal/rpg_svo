@@ -28,7 +28,7 @@ class AbstractCamera;
 class PerformanceMonitor;
 }
 
-namespace svo
+namespace slam
 {
 class Point;
 class Matcher;
@@ -46,8 +46,8 @@ public:
     STAGE_RELOCALIZING
   };
   enum TrackingQuality {
-    TRACKING_INSUFFICIENT,
     TRACKING_BAD,
+	TRACKING_INSUFFICIENT,
     TRACKING_GOOD
   };
   enum UpdateResult {
@@ -81,6 +81,17 @@ public:
   /// Get the number of feature observations of the last frame.
   size_t lastNumObservations() const { return num_obs_last_; }
 
+  virtual void motionPrediction(){};
+
+  virtual void dataAssociation() {};
+
+  virtual void optimization() {};
+
+  virtual void postProcessing() {};
+
+  virtual void alignCoorindateSystem(const Eigen::Matrix3d&dR, const Eigen::Vector3d&dP, const double dScale){};
+
+  virtual void plugIMUSystem(){};
 protected:
   Stage stage_;                 //!< Current stage of the algorithm.
   bool set_reset_;              //!< Flag that the user can set. Will reset the system before the next iteration.
@@ -90,6 +101,7 @@ protected:
   vk::RingBuffer<size_t> acc_num_obs_;          //!< Number of observed features of the last 10 frames, used to give some user feedback on the tracking performance.
   size_t num_obs_last_;                         //!< Number of observations in the previous frame.
   TrackingQuality tracking_quality_;            //!< An estimate of the tracking quality based on the number of tracked features.
+  int internalID_;				//!Image counter.
 
   /// Before a frame is processed, this function is called.
   bool startFrameProcessingCommon(const double timestamp);

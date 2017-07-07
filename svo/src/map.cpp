@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <set>
 #include <svo/map.h>
@@ -20,7 +21,7 @@
 #include <svo/frame.h>
 #include <svo/feature.h>
 
-namespace svo {
+namespace slam {
 
 Map::Map() {}
 
@@ -363,4 +364,4 @@ void mapStatistics(Map* map)
 }
 
 } // namespace map_debug
-} // namespace svo
+} // namespace slam

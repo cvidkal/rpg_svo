@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "stdafx.h"
 #include <stdexcept>
 #include <svo/frame.h>
 #include <svo/feature.h>
@@ -23,7 +24,7 @@
 #include <vikit/vision.h>
 #include <fast/fast.h>
 
-namespace svo {
+namespace slam {
 
 int Frame::frame_counter_ = 0;
 
@@ -186,4 +187,4 @@ bool getSceneDepth(const Frame& frame, double& depth_mean, double& depth_min)
 }
 
 } // namespace frame_utils
-} // namespace svo
+} // namespace slam

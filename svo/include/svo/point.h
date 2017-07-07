@@ -24,7 +24,7 @@ namespace g2o {
 }
 typedef g2o::VertexSBAPointXYZ g2oPoint;
 
-namespace svo {
+namespace slam {
 
 struct Feature;
 
@@ -102,6 +102,6 @@ public:
   }
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_POINT_H_

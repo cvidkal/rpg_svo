@@ -13,13 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <svo/feature_detection.h>
 #include <svo/feature.h>
 #include <fast/fast.h>
 #include <vikit/vision.h>
 
-namespace svo {
+namespace slam {
 namespace feature_detection {
 
 AbstractDetector::AbstractDetector(
@@ -114,5 +115,5 @@ void FastDetector::detect(
 }
 
 } // namespace feature_detection
-} // namespace svo
+} // namespace slam
 

@@ -26,7 +26,7 @@ namespace vk {
   }
 }
 
-namespace svo {
+namespace slam {
 
 class Point;
 class Frame;
@@ -125,6 +125,6 @@ public:
 	void createPatchFromPatchWithBorder();
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_MATCHER_H_

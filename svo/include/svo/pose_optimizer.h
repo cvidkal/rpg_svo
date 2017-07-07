@@ -19,7 +19,7 @@
 
 #include <svo/global.h>
 
-namespace svo {
+namespace slam {
 
 using namespace Eigen;
 using namespace Sophus;
@@ -45,6 +45,6 @@ void optimizeGaussNewton(
     size_t& num_obs);
 
 } // namespace pose_optimizer
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_POSE_OPTIMIZER_H_

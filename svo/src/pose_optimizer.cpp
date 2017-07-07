@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <stdexcept>
 #include <svo/pose_optimizer.h>
@@ -22,7 +23,7 @@
 #include <vikit/robust_cost.h>
 #include <vikit/math_utils.h>
 
-namespace svo {
+namespace slam {
 namespace pose_optimizer {
 
 void optimizeGaussNewton(
@@ -161,4 +162,4 @@ void optimizeGaussNewton(
 }
 
 } // namespace pose_optimizer
-} // namespace svo
+} // namespace slam

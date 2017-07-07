@@ -24,7 +24,7 @@ namespace vk {
 class AbstractCamera;
 }
 
-namespace svo {
+namespace slam {
 
 struct Feature;
 
@@ -77,6 +77,6 @@ protected:
   virtual void finishIteration();
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_SPARSE_IMG_ALIGN_H_

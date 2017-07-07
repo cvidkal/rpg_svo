@@ -18,8 +18,9 @@
 #define SVO_FEATURE_H_
 
 #include <svo/frame.h>
+#include <util/globalDefines.h>
 
-namespace svo {
+namespace slam {
 
 /// A salient image region that is tracked across frames.
 struct Feature
@@ -38,6 +39,8 @@ struct Feature
   int level;            //!< Image pyramid level where feature was extracted.
   Point* point;         //!< Pointer to 3D point which corresponds to the feature.
   Vector2d grad;        //!< Dominant gradient direction for edglets, normalized.
+  EIGEN_ALIGN16 float patch_[PATCH_SIZE]; //patch used for tracking
+  EIGEN_ALIGN16 float warped_patch_[PATCH_SIZE];
 
   Feature(Frame* _frame, const Vector2d& _px, int _level) :
     type(CORNER),
@@ -70,6 +73,6 @@ struct Feature
   {}
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_FEATURE_H_

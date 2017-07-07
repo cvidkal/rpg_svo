@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\IMU">
+      <UniqueIdentifier>{0f92c249-a5e2-4e78-a7e6-4c4e22a761d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IMU\AHRS">
+      <UniqueIdentifier>{75e4241c-807d-4562-878c-b73c3e49eae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IMU\InertialSensor">
+      <UniqueIdentifier>{750af35d-d3f3-4bbd-bc20-6cff00b97dcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IMU\util">
+      <UniqueIdentifier>{d43024a1-8ba9-48ff-84c1-22360bcf8fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{47e9a7de-d2eb-4fdf-9302-96af6e36b003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\VideoSource">
+      <UniqueIdentifier>{47702763-d167-42fa-b54e-3125abad857b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\svo\src\config.cpp">
@@ -56,6 +74,84 @@
     </ClCompile>
     <ClCompile Include="..\..\..\svo\src\sparse_img_align.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\DeltaBuffer.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuBuffer.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuEstimator.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuManager.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuSaver.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\OutputBuffer.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\OutputFilter.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\TrackingFilter.cpp">
+      <Filter>Source Files\IMU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS.cpp">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS_Device.cpp">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS_Madgwick.cpp">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor.cpp">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Benchmark.cpp">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Dataset.cpp">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_ThreeSpace.cpp">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\IMU\Utils\MathUtils.cpp">
+      <Filter>Source Files\IMU\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\util\SLAMContext.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Benchmark.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_CameraLib.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Dataset.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Fingo.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_TUM.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSourceWebCam.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\slamsystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\util\LogManager.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +205,93 @@
     </ClInclude>
     <ClInclude Include="..\..\..\svo\include\svo\sparse_img_align.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\DeltaBuffer.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuBuffer.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuEstimator.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuManager.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuSaver.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\OutputBuffer.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\OutputFilter.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\TrackingFilter.h">
+      <Filter>Source Files\IMU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS.h">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS_Device.h">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS_Madgwick.h">
+      <Filter>Source Files\IMU\AHRS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor.h">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Benchmark.h">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Dataset.h">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_ThreeSpace.h">
+      <Filter>Source Files\IMU\InertialSensor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\MathUtils.h">
+      <Filter>Source Files\IMU\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\RingBuffer.h">
+      <Filter>Source Files\IMU\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\TimeUtils.h">
+      <Filter>Source Files\IMU\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\TypeDefs.h">
+      <Filter>Source Files\IMU\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\util\SLAMContext.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Benchmark.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_CameraLib.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Dataset.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Fingo.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_TUM.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSourceWebCam.h">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\slamsystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\util\LogManager.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

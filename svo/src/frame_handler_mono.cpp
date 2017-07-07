@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <svo/config.h>
 #include <svo/frame_handler_mono.h>
@@ -27,7 +28,7 @@
 #include <svo/bundle_adjustment.h>
 #endif
 
-namespace svo {
+namespace slam {
 
 FrameHandlerMono::FrameHandlerMono(vk::AbstractCamera* cam) :
   FrameHandlerBase(),
@@ -127,17 +128,10 @@ FrameHandlerBase::UpdateResult FrameHandlerMono::processSecondFrame()
 
 FrameHandlerBase::UpdateResult FrameHandlerMono::processFrame()
 {
-  // Set initial pose TODO use prior
-  new_frame_->T_f_w_ = last_frame_->T_f_w_;
 
-  // sparse image align
-  SVO_START_TIMER("sparse_img_align");
-  SparseImgAlign img_align(Config::kltMaxLevel(), Config::kltMinLevel(),
-                           30, SparseImgAlign::GaussNewton, false, false);
-  size_t img_align_n_tracked = img_align.run(last_frame_, new_frame_);
-  SVO_STOP_TIMER("sparse_img_align");
-  SVO_LOG(img_align_n_tracked);
-  SVO_DEBUG_STREAM("Img Align:\t Tracked = " << img_align_n_tracked);
+	// Do Motion Prediction
+	motionPrediction();
+
 
   // map reprojection & feature alignment
   SVO_START_TIMER("reproject");
@@ -184,7 +178,10 @@ FrameHandlerBase::UpdateResult FrameHandlerMono::processFrame()
   }
   double depth_mean, depth_min;
   frame_utils::getSceneDepth(*new_frame_, depth_mean, depth_min);
-  if(!needNewKf(depth_mean) || tracking_quality_ == TRACKING_BAD)
+  bool bNeedKf = false;
+  bNeedKf = !(!needNewKf(depth_mean) || tracking_quality_ == TRACKING_BAD);
+  bNeedKf |= new_frame_->fts_.size() < 80;
+  if(!bNeedKf)
   {
     depth_filter_->addFrame(new_frame_);
     return RESULT_NO_KEYFRAME;
@@ -281,7 +278,23 @@ bool FrameHandlerMono::relocalizeFrameAtPose(
   return false;
 }
 
-void FrameHandlerMono::resetAll()
+void FrameHandlerMono::motionPrediction()
+{
+	// Set initial pose TODO use prior
+	new_frame_->T_f_w_ = last_frame_->T_f_w_;
+
+	// sparse image align
+	SVO_START_TIMER("sparse_img_align");
+	SparseImgAlign img_align(Config::kltMaxLevel(), Config::kltMinLevel(),
+		30, SparseImgAlign::LevenbergMarquardt, false, false);
+	size_t img_align_n_tracked = img_align.run(last_frame_, new_frame_);
+	SVO_STOP_TIMER("sparse_img_align");
+	SVO_LOG(img_align_n_tracked);
+	SVO_DEBUG_STREAM("Img Align:\t Tracked = " << img_align_n_tracked);
+
+}
+
+	void FrameHandlerMono::resetAll()
 {
   resetCommon();
   last_frame_.reset();
@@ -322,4 +335,48 @@ void FrameHandlerMono::setCoreKfs(size_t n_closest)
   std::for_each(overlap_kfs_.begin(), overlap_kfs_.end(), [&](pair<FramePtr,size_t>& i){ core_kfs_.insert(i.first); });
 }
 
-} // namespace svo
+	void FrameHandlerMono::preProcessIMU()
+	{
+#if USE_IMU
+		if (mbUseImu) {
+
+			// get delta pose
+			if (internalID_ < 2) {
+				if (SLAM_CONTEXT.use_inverse_preintegration) {
+					mInvDeltaPose.Reset();
+				}
+				else {
+					mDeltaPose.Reset();
+				}
+			}
+			else {
+				double lastTimestamp = last_frame_->timestamp_;
+
+				if (SLAM_CONTEXT.use_inverse_preintegration) {
+					mInvDeltaPose.Reset();
+					mInvDeltaPose.startTime = lastTimestamp;
+					mInvDeltaPose.endTime = new_frame_->timestamp_;
+					mpImuBuffer->invPreIntegrate(mInvDeltaPose, false, true);
+				}
+				else {
+					mDeltaPose.Reset();
+					mDeltaPose.startTime = lastTimestamp;
+					mDeltaPose.endTime = new_frame_->timestamp_;
+					int cnt = mpImuBuffer->ImuPreIntegrate(mDeltaPose, false, false);
+					//printf("cnt = %d\n", cnt);  
+				}
+
+			}
+
+			// get scale and gravity
+			mbHaveEstimateScale = mpImuEstimator->isScaleEstimated();
+			ImuEstimator::GetScaleAndGravity(mScale, mGravity);
+
+			//mVisionPose.pos.setZero(); 
+			mVisionPose.vel.setZero();
+			mVisionPose.quality = (int)(TrackingQuality::TRACKING_GOOD);
+
+		}
+#endif
+	}
+} // namespace slam

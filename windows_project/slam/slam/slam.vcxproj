@@ -102,13 +102,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\svo\include\;$(OPENCV_PATH)\include;..\..\..\3rdParty\fast\include;..\..\..\3rdParty\Sophus;..\..\..\3rdParty\eigen_3.2.10;..\..\..\3rdParty\rpg_vikit\vikit_common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__SSE2__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Hua\Documents\rpg_svo\svo\src\IMU;..\..\..\svo\src\;..\..\..\svo\include\;$(OPENCV_PATH)\include;..\..\..\3rdParty\fast\include;..\..\..\3rdParty\Sophus;..\..\..\3rdParty\eigen_3.2.10;..\..\..\3rdParty\rpg_vikit\vikit_common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__SSE2__;USE_IMU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -125,13 +126,41 @@
     <ClCompile Include="..\..\..\svo\src\frame.cpp" />
     <ClCompile Include="..\..\..\svo\src\frame_handler_base.cpp" />
     <ClCompile Include="..\..\..\svo\src\frame_handler_mono.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS_Device.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\AHRS\AHRS_Madgwick.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\DeltaBuffer.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuBuffer.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuEstimator.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuManager.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\ImuSaver.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Benchmark.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Dataset.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_ThreeSpace.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\OutputBuffer.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\OutputFilter.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\TrackingFilter.cpp" />
+    <ClCompile Include="..\..\..\svo\src\IMU\Utils\MathUtils.cpp" />
     <ClCompile Include="..\..\..\svo\src\initialization.cpp" />
     <ClCompile Include="..\..\..\svo\src\map.cpp" />
     <ClCompile Include="..\..\..\svo\src\matcher.cpp" />
     <ClCompile Include="..\..\..\svo\src\point.cpp" />
     <ClCompile Include="..\..\..\svo\src\pose_optimizer.cpp" />
     <ClCompile Include="..\..\..\svo\src\reprojector.cpp" />
+    <ClCompile Include="..\..\..\svo\src\slamsystem.cpp" />
     <ClCompile Include="..\..\..\svo\src\sparse_img_align.cpp" />
+    <ClCompile Include="..\..\..\svo\src\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\util\LogManager.cpp" />
+    <ClCompile Include="..\..\..\svo\src\util\SLAMContext.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSourceWebCam.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Benchmark.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_CameraLib.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Dataset.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Fingo.cpp" />
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_TUM.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\svo\include\svo\bundle_adjustment.h" />
@@ -151,6 +180,35 @@
     <ClInclude Include="..\..\..\svo\include\svo\pose_optimizer.h" />
     <ClInclude Include="..\..\..\svo\include\svo\reprojector.h" />
     <ClInclude Include="..\..\..\svo\include\svo\sparse_img_align.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS_Device.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\AHRS\AHRS_Madgwick.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\DeltaBuffer.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuBuffer.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuEstimator.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuManager.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\ImuSaver.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Benchmark.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_Dataset.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\InertialSensor\InertialSensor_ThreeSpace.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\OutputBuffer.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\OutputFilter.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\TrackingFilter.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\MathUtils.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\RingBuffer.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\TimeUtils.h" />
+    <ClInclude Include="..\..\..\svo\src\IMU\Utils\TypeDefs.h" />
+    <ClInclude Include="..\..\..\svo\src\slamsystem.h" />
+    <ClInclude Include="..\..\..\svo\src\util\LogManager.h" />
+    <ClInclude Include="..\..\..\svo\src\util\SLAMContext.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSourceWebCam.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Benchmark.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_CameraLib.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Dataset.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Fingo.h" />
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_TUM.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

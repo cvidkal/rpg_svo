@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -27,7 +28,7 @@
 #include <vikit/math_utils.h>
 #include <mutex>
 
-namespace svo {
+namespace slam {
 
 Reprojector::Reprojector(vk::AbstractCamera* cam, Map& map) :
     map_(map)
@@ -215,4 +216,4 @@ bool Reprojector::reprojectPoint(FramePtr frame, Point* point)
   return false;
 }
 
-} // namespace svo
+} // namespace slam

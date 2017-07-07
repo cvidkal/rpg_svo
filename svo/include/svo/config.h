@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-namespace svo {
+namespace slam {
 
 using std::string;
 
@@ -154,6 +154,6 @@ private:
   int quality_max_drop_fts;
 };
 
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_CONFIG_H_

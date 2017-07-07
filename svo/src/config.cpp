@@ -13,13 +13,14 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #ifdef SVO_USE_ROS
 #include <vikit/params_helper.h>
 #endif
 #include <svo/config.h>
 
-namespace svo {
+namespace slam {
 
 Config::Config() :
 #ifdef SVO_USE_ROS
@@ -55,12 +56,12 @@ Config::Config() :
 #else
     trace_name("svo"),
     trace_dir("/tmp"),
-    n_pyr_levels(3),
+    n_pyr_levels(4),
     use_imu(false),
     core_n_kfs(3),
     map_scale(1.0),
-    grid_size(25),
-    init_min_disparity(50.0),
+    grid_size(14),
+    init_min_disparity(25.0),
     init_min_tracked(50),
     init_min_inliers(40),
     klt_max_level(4),
@@ -73,7 +74,7 @@ Config::Config() :
     loba_thresh(2.0),
     loba_robust_huber_width(1.0),
     loba_num_iter(0),
-    kfselect_mindist(0.12),
+    kfselect_mindist(0.05),
     triang_min_corner_score(20.0),
     triang_half_patch_size(4),
     subpix_n_iter(10),
@@ -91,5 +92,5 @@ Config& Config::getInstance()
   return instance;
 }
 
-} // namespace svo
+} // namespace slam
 

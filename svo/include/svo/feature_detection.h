@@ -20,7 +20,7 @@
 #include <svo/global.h>
 #include <svo/frame.h>
 
-namespace svo {
+namespace slam {
 
 /// Implementation of various feature detectors.
 namespace feature_detection {
@@ -101,7 +101,16 @@ public:
       Features& fts);
 };
 
+class ShiTomashiDetector :public AbstractDetector {
+public:
+	ShiTomashiDetector(
+		const int img_width,
+		const int img_height,
+		const int cell_size,
+		const int n_pyr_levels);
+};
+
 } // namespace feature_detection
-} // namespace svo
+} // namespace slam
 
 #endif // SVO_FEATURE_DETECTION_H_

@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <algorithm>
 #include <vikit/math_utils.h>
@@ -29,7 +30,7 @@
 #include <thread>
 #include <random>
 
-namespace svo {
+namespace slam {
 
 int Seed::batch_counter = 0;
 int Seed::seed_counter = 0;
@@ -356,4 +357,4 @@ double DepthFilter::computeTau(
   return (z_plus - z); // tau
 }
 
-} // namespace svo
+} // namespace slam

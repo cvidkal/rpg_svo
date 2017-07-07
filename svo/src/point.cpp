@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#include "stdafx.h"
 
 #include <stdexcept>
 #include <vikit/math_utils.h>
@@ -20,7 +21,7 @@
 #include <svo/frame.h>
 #include <svo/feature.h>
  
-namespace svo {
+namespace slam {
 
 int Point::point_counter_ = 0;
 
@@ -176,4 +177,4 @@ void Point::optimize(const size_t n_iter)
 #endif
 }
 
-} // namespace svo
+} // namespace slam
