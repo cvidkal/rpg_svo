@@ -5,3 +5,6 @@ windows_project/slam/sophus/x64/
 windows_project/slam/test/x64/
 windows_project/slam/vikit/x64/
 *.exe
+svo/cmake-build-release/
+svo/cmake-build-debug/
+windows_project/slam/x64/

@@ -47,6 +47,7 @@ private:
 	static double mLastImageTimestamp; 
 
 	void RunThread();
+	int nAxis;
 };
 
 }

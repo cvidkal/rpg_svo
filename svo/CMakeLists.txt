@@ -1,9 +1,16 @@
 ################################################################################
+set(EIGEN3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
+set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
+set(OpenCV_DIR $ENV{LIBOPENCV247} )
+set(OpenCV_STATIC ON)
+add_subdirectory(3rdParty)
+
+################################################################################
 # user build settings
 
 SET(TRACE TRUE)
 SET(HAVE_G2O FALSE) 
-SET(USE_ROS TRUE) # Set FALSE if you want to build this package without Catkin
+SET(USE_ROS false) # Set FALSE if you want to build this package without Catkin
 SET(DEBUG_OUTPUT FALSE) # Only relevant if build without ROS
 
 ################################################################################
@@ -49,7 +56,6 @@ FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(Eigen REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
 FIND_PACKAGE(fast REQUIRED)
-FIND_PACKAGE(Boost REQUIRED COMPONENTS thread system)
 
 IF(USE_ROS)
   FIND_PACKAGE(catkin REQUIRED COMPONENTS roscpp roslib cmake_modules vikit_common vikit_ros)
@@ -71,7 +77,6 @@ INCLUDE_DIRECTORIES(
   ${Eigen_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
-  ${Boost_INCLUDE_DIRS}
   ${fast_INCLUDE_DIRS}
 )
 
@@ -79,7 +84,6 @@ INCLUDE_DIRECTORIES(
 LIST(APPEND LINK_LIBS 
   ${OpenCV_LIBS}
   ${Sophus_LIBRARIES}
-  ${Boost_LIBRARIES}
   ${fast_LIBRARIES}
 )
 
@@ -106,7 +110,16 @@ LIST(APPEND SOURCEFILES
   src/feature_detection.cpp
   src/depth_filter.cpp
   src/config.cpp
-  src/sparse_img_align.cpp)
+  src/sparse_img_align.cpp
+  src/stdafx.cpp
+        src/slamsystem.cpp
+        src/VideoSource/VideoSource_Euroc.cpp
+        src/util/LogManager.cpp
+        src/util/SLAMContext.cpp
+        src/IMU/DeltaBuffer.cpp
+        src/IMU/ImuBuffer.cpp
+        src/IMU/ImuEstimator.cpp
+        )
 
 # Add g2o if available
 IF(HAVE_G2O)

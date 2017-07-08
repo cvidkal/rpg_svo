@@ -22,14 +22,6 @@ public:
 		nn++;
 		return true;
 	}
-	virtual bool GetFrame(cv::Mat& img, double& timestamp, double& exposure, Sophus::SE3*gt_Twc)override {
-		if (nn >= imgs.size())
-			return false;
-		if (gt_Twc&&hasGroundTruth){
-			*gt_Twc = poses[nn];
-		}
-		return GetFrame(img, timestamp, exposure);
-	}
 	virtual bool GetFrameStereo(cv::Mat& imgLeft, cv::Mat& imgRight, double& timestamp){ return false; }
 
 

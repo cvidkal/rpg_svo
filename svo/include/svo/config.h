@@ -154,6 +154,13 @@ private:
   int quality_max_drop_fts;
 };
 
+
+#define PATCH_SIZE 8
+#define PYR_USED 3
+extern int staticPattern[8][2];
+
+
+
 } // namespace slam
 
 #endif // SVO_CONFIG_H_

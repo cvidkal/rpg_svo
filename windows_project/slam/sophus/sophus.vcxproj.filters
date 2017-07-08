@@ -15,42 +15,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\scso3.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\scso3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\se2.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\se2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\se3.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\se3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\sim3.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\sim3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\so2.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\so2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\Sophus\sophus\so3.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\Sophus\sophus\so3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\scso3.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\scso3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\se2.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\se2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\se3.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\se3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\sim3.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\sim3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\so2.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\so2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\3rdParty\Sophus\sophus\so3.h">
+    <ClInclude Include="..\..\..\svo\3rdParty\Sophus\sophus\so3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -114,6 +114,16 @@ void FastDetector::detect(
   resetGrid();
 }
 
+ShiTomashiDetector::ShiTomashiDetector(const int img_width, const int img_height, const int cell_size, const int n_pyr_levels)
+	:AbstractDetector(img_width,img_height,cell_size,n_pyr_levels)
+{
+
+}
+
+void ShiTomashiDetector::detect(Frame * frame, const ImgPyr & img_pyr, const double detection_threshold, Features & fts)
+{
+}
+
 } // namespace feature_detection
 } // namespace slam
 

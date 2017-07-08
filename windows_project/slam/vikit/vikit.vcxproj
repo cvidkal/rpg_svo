@@ -107,7 +107,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>__SSE2__;_MBCS;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(OPENCV_PATH)\include;..\..\..\3rdParty\Sophus;..\..\..\3rdParty\eigen_3.2.10;..\..\..\3rdParty\rpg_vikit\vikit_common\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OPENCV_PATH)\include;..\..\..\svo\3rdParty\Sophus;..\..\..\svo\3rdParty\eigen_3.2.10;..\..\..\svo\3rdParty\rpg_vikit\vikit_common\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,16 +115,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\atan_camera.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\homography.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\img_align.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\atan_camera.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\homography.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\img_align.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\3rdParty\rpg_vikit\vikit_common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\math_utils.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\omni_camera.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\pinhole_camera.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\robust_cost.cpp" />
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\vision.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\math_utils.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\omni_camera.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\pinhole_camera.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\robust_cost.cpp" />
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\vision.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

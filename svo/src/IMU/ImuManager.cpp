@@ -26,6 +26,10 @@ ImuManager::ImuManager()
         mpImu = new InertialSensor_Benchmark(SLAM_CONTEXT.dataset_path + "imu.csv", SLAM_CONTEXT.getImuConfigPath());
 #endif
     }
+	else if(SLAM_CONTEXT.video_source == 6)
+	{
+		mpImu = new InertialSensor_Dataset(SLAM_CONTEXT.dataset_path + "/imu0/data.csv", SLAM_CONTEXT.getImuConfigPath());
+	}
 	else {
 #ifdef PLATFORM_ANDROID
 		mpImu = new InertialSensor_Android(SLAM_CONTEXT.getImuConfigPath());

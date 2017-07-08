@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\atan_camera.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\atan_camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\homography.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\homography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\img_align.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\img_align.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\math_utils.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\math_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\omni_camera.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\omni_camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\pinhole_camera.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\pinhole_camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\robust_cost.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\robust_cost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\rpg_vikit\vikit_common\src\vision.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\rpg_vikit\vikit_common\src\vision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

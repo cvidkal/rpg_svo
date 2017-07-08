@@ -17,6 +17,12 @@ double InertialSensor_Dataset::mLastImageTimestamp;
 InertialSensor_Dataset::InertialSensor_Dataset(const std::string& path, const std::string& configFile)
 	: InertialSensor(configFile), mIndex(1)
 {
+	if (SLAM_CONTEXT.video_source == 6) {
+		nAxis = 6;
+	}
+	else {
+		nAxis = 9;
+	}
 	LoadImuData(path.c_str());
 
 	// 
@@ -80,14 +86,27 @@ bool InertialSensor_Dataset::LoadImuData(const char* path)
 			ss << s;
 			ss >> timestamp;
 			imuInput.timestamp = timestamp;
-			for (int i = 0; i < 9; i++) {
-				ss >> ch >> imuInput.data[i];
+			if (nAxis == 9) {
+				for (int i = 0; i < 9; i++) {
+					ss >> ch >> imuInput.data[i];
+				}
+				// quaternion
+				ss >> ch >> imuInput.data[12];		// qw
+				ss >> ch >> imuInput.data[9];		// qx
+				ss >> ch >> imuInput.data[10];		// qy
+				ss >> ch >> imuInput.data[11];		// qz
 			}
-			// quaternion
-			ss >> ch >> imuInput.data[12];		// qw
-			ss >> ch >> imuInput.data[9];		// qx
-			ss >> ch >> imuInput.data[10];		// qy
-			ss >> ch >> imuInput.data[11];		// qz
+			else if(nAxis == 6)
+			{
+				for (int i = 0; i < 6; i++) {
+					ss >> ch >> imuInput.data[i];
+				}
+				imuInput.data[6] = imuInput.data[7] = imuInput.data[8] = 0.0;
+				// quaternion
+				 imuInput.data[12] = 1.0;		// qw
+				 imuInput.data[9] = imuInput.data[10] = imuInput.data[11] = 0.0;	// qz
+			}
+
 
 			mvImuData.push_back(imuInput);
 		}

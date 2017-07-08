@@ -108,6 +108,14 @@ public:
 		const int img_height,
 		const int cell_size,
 		const int n_pyr_levels);
+
+	virtual ~ShiTomashiDetector() {};
+	virtual void detect(
+		Frame* frame,
+		const ImgPyr&img_pyr,
+		const double detection_threshold,
+		Features&fts);
+	cv::GoodFeaturesToTrackDetector detector_;
 };
 
 } // namespace feature_detection

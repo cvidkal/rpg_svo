@@ -18,7 +18,7 @@
 #define SVO_FEATURE_H_
 
 #include <svo/frame.h>
-#include <util/globalDefines.h>
+#include <svo/config.h>
 
 namespace slam {
 
@@ -41,6 +41,8 @@ struct Feature
   Point* point;         //!< Pointer to 3D point which corresponds to the feature.
   Vector2d grad;        //!< Dominant gradient direction for edglets, normalized.
   EIGEN_ALIGN16 float patch_[PYR_USED][PATCH_SIZE]; //patch used for tracking
+  EIGEN_ALIGN16 float dx[PYR_USED][PATCH_SIZE];
+  EIGEN_ALIGN16 float dy[PYR_USED][PATCH_SIZE];
   EIGEN_ALIGN16 float warped_patch_[PATCH_SIZE];
   
 

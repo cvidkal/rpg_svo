@@ -153,6 +153,9 @@
     <ClCompile Include="..\..\..\svo\src\util\LogManager.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\svo\src\VideoSource\VideoSource_Euroc.cpp">
+      <Filter>Source Files\VideoSource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\svo\include\svo\bundle_adjustment.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\svo\src\util\LogManager.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\svo\src\VideoSource\VideoSource_Euroc.h">
+      <Filter>Source Files\VideoSource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

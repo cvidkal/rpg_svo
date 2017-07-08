@@ -70,32 +70,7 @@ bool VideoSource_Dataset::LoadImages(const string& strPath)
 		}
 	}
 
-	/// load ground truth
-	ifstream gtFile;
-	string groundTruth = strPath + "/../groundtruth.txt";
-	gtFile.open(groundTruth.c_str());
-	hasGroundTruth = gtFile.is_open();
 
-	if (hasGroundTruth){
-		while (!gtFile.eof()){
-			string s;
-			getline(gtFile, s);
-			if (s.find('N') != std::string::npos)
-				continue;
-			stringstream ss;
-			ss << s;
-			double timestamp;
-			ss >> timestamp;
-			Eigen::Matrix<double, 7, 1> P;
-			auto p = P.data();
-			ss >> p[0] >> p[1] >> p[2] >> p[3] >> p[4] >> p[5] >> p[6];
-			Sophus::SE3 Twc;
-			Twc.setQuaternion(Eigen::Quaterniond(p[6], p[3], p[4], p[5]));
-			Twc.translation() = P.head<3>();
-			pose[timestamp] = Twc;
-
-		}
-	}
 
 	/// check image
 	cv::Mat img = cv::imread(mvStrImageLeft[0], CV_LOAD_IMAGE_UNCHANGED);

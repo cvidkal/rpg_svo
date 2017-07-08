@@ -101,7 +101,7 @@ public:
 
 	bool check_overlap;
 
-	// video source: 0 - dataset, 1 - cameralib
+	// video source: 0 - dataset, 1 - cameralib, 3- benchmark, 6 - Euroc
 	int video_source;
 	// debayer image
 	bool use_debayer; 

@@ -13,21 +13,11 @@ public:
 
 	virtual bool GetFrame(cv::Mat& img, double& timestamp, double& exposure) = 0;
 	virtual bool GetFrameStereo(cv::Mat& imgLeft, cv::Mat& imgRight, double& timestamp) = 0;
-	virtual bool GetFrame(cv::Mat& img, double& timestamp, double& exposure, Sophus::SE3*gt_Twc){
-		bool ret = GetFrame(img, timestamp, exposure);
-		if (hasGroundTruth&&gt_Twc){
-			if (pose.count(timestamp)){
-				*gt_Twc = pose[timestamp];
-			}
-			else {
-				gt_Twc->translation().setZero();
-				gt_Twc->setRotationMatrix(Eigen::Matrix3d::Identity());
-			}
-		}
-		return ret;
-	}
-
-	std::map<double, Sophus::SE3, std::less<double>, Eigen::aligned_allocator<std::pair<const double, Sophus::SE3>>> pose;
+	virtual bool getGroundTruth(double timestamp, Sophus::SE3&Twc)
+	{
+		return false;
+	};
+	std::vector<std::pair<double, Sophus::SE3>> poses;
 	bool hasGroundTruth = false;
 };
 

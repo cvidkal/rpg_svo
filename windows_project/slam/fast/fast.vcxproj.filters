@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParty\fast\src\fast_10.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\fast\src\fast_10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\fast\src\fast_10_score.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\fast\src\fast_10_score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\fast\src\faster_corner_10_sse.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\fast\src\faster_corner_10_sse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParty\fast\src\nonmax_3x3.cpp">
+    <ClCompile Include="..\..\..\svo\3rdParty\fast\src\nonmax_3x3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
