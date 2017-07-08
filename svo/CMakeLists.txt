@@ -1,6 +1,5 @@
 ################################################################################
 set(EIGEN3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
-set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
 set(OpenCV_DIR $ENV{LIBOPENCV247} )
 set(OpenCV_STATIC ON)
 add_subdirectory(3rdParty)
@@ -8,7 +7,7 @@ add_subdirectory(3rdParty)
 ################################################################################
 # user build settings
 
-SET(TRACE TRUE)
+SET(TRACE false)
 SET(HAVE_G2O FALSE) 
 SET(USE_ROS false) # Set FALSE if you want to build this package without Catkin
 SET(DEBUG_OUTPUT FALSE) # Only relevant if build without ROS
@@ -38,7 +37,7 @@ ENDIF()
 
 # Set build flags, set ARM_ARCHITECTURE environment variable on Odroid
 # Set build flags. Set IS_ARM on odroid board as environment variable
-SET(CMAKE_CXX_FLAGS "-Wall -D_LINUX -D_REENTRANT -march=native -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unknown-pragmas")
+SET(CMAKE_CXX_FLAGS "-Wall -D_LINUX -D_REENTRANT -march=native -Wno-unused-variable -Wno-unused-const-variable -Wno-unknown-pragmas")
 IF(DEFINED ENV{ARM_ARCHITECTURE})
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon -march=armv7-a")
 ELSE()
@@ -53,7 +52,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -
 
 # Add plain cmake packages 
 FIND_PACKAGE(OpenCV REQUIRED)
-FIND_PACKAGE(Eigen REQUIRED)
+FIND_PACKAGE(Eigen3 REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
 FIND_PACKAGE(fast REQUIRED)
 
@@ -74,10 +73,12 @@ ENDIF()
 # Include dirs
 INCLUDE_DIRECTORIES(
   include
-  ${Eigen_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIR}
   ${OpenCV_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
   ${fast_INCLUDE_DIRS}
+        src/
+        src/IMU
 )
 
 # Set link libraries
@@ -114,11 +115,24 @@ LIST(APPEND SOURCEFILES
   src/stdafx.cpp
         src/slamsystem.cpp
         src/VideoSource/VideoSource_Euroc.cpp
+        src/VideoSource/VideoSource_Benchmark.cpp
         src/util/LogManager.cpp
         src/util/SLAMContext.cpp
         src/IMU/DeltaBuffer.cpp
         src/IMU/ImuBuffer.cpp
         src/IMU/ImuEstimator.cpp
+        src/IMU/ImuManager.cpp
+        src/IMU/ImuSaver.cpp
+        src/IMU/OutputBuffer.cpp
+        src/IMU/OutputFilter.cpp
+        src/IMU/TrackingFilter.cpp
+        src/IMU/Utils/MathUtils.cpp
+        src/IMU/InertialSensor/InertialSensor.cpp
+        src/IMU/InertialSensor/InertialSensor_Dataset.cpp
+        src/IMU/InertialSensor/InertialSensor_Benchmark.cpp
+        src/IMU/AHRS/AHRS.cpp
+        src/IMU/AHRS/AHRS_Madgwick.cpp
+        src/IMU/AHRS/AHRS_Device.cpp
         )
 
 # Add g2o if available

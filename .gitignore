@@ -8,3 +8,5 @@ windows_project/slam/vikit/x64/
 svo/cmake-build-release/
 svo/cmake-build-debug/
 windows_project/slam/x64/
+svo/lib
+svo/bin

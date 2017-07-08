@@ -22,6 +22,7 @@
 #include <svo/feature_detection.h>
 #include <svo/matcher.h>
 #include <mutex>
+#include <thread>
 
 namespace slam {
 

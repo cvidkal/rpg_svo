@@ -16,6 +16,7 @@
 #include <string.h>     // memset
 #include <cassert>
 #include <cstdlib>
+#include "../targetplaform.h"
 
 namespace vk {
 namespace aligned_mem {
@@ -62,21 +63,28 @@ namespace aligned_mem {
     static inline void free(T*, size_t ) {}
   };
 
-  //inline void * aligned_alloc(size_t count, size_t alignment){
-  //  void * mem = NULL;
-  //  assert(posix_memalign(&mem, alignment, count) == 0);
-  //  return mem;
-  //}
+#ifdef PLATFORM_WINDOWS
+
+template <class T>
+  inline T * aligned_alloc(size_t count, size_t alignment){
+    void * data = aligned_alloc(sizeof(T)* count, alignment);
+    return new (data) T[count];
+  }
+#else
+  template <class T>
+        inline void * aligned_alloc(size_t count, size_t alignment){
+    void * mem = NULL;
+    assert(posix_memalign(&mem, alignment, sizeof(T)*count) == 0);
+    return mem;
+  }
+
+#endif
 
   inline void aligned_free(void * memory) {
     free(memory);
   }
 
-  template <class T>
-  inline T * aligned_alloc(size_t count, size_t alignment){
-    void * data = aligned_alloc(sizeof(T)* count, alignment);
-    return new (data) T[count];
-  }
+
 
   template <class T>
   inline void aligned_free(T * memory, size_t count){

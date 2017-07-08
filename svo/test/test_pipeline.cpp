@@ -41,7 +41,7 @@ namespace svo {
 class BenchmarkNode
 {
   vk::AbstractCamera* cam_;
-  svo::FrameHandlerMono* vo_;
+  slam::FrameHandlerMono* vo_;
 
 public:
   BenchmarkNode();
@@ -54,7 +54,7 @@ BenchmarkNode::BenchmarkNode()
   //cam_ = new vk::PinholeCamera(320, 240, 240, 240, 159.5, 119.5);
   cam_ = new vk::PinholeCamera(640, 480, 591.0495, 590.7825, 321.4926, 250.3737,0.0299,-0.1178,0.0069,-0.0018);
 	//cam_ = new vk::PinholeCamera(752, 480, 315.5, 315.5, 376.0, 240.0);
-	vo_ = new svo::FrameHandlerMono(cam_);
+	vo_ = new slam::FrameHandlerMono(cam_);
   vo_->start();
 }
 

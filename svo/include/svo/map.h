@@ -25,7 +25,7 @@ namespace slam {
 
 class Point;
 struct Feature;
-class Seed;
+    struct Seed;
 
 /// Container for converged 3D points that are not already assigned to two keyframes.
 class MapPointCandidates

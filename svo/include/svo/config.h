@@ -154,9 +154,8 @@ private:
   int quality_max_drop_fts;
 };
 
-
-#define PATCH_SIZE 8
-#define PYR_USED 3
+    static const int PATCH_SIZE =8;
+static const int  PYR_USED =3;
 extern int staticPattern[8][2];
 
 

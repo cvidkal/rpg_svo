@@ -19,7 +19,7 @@ ImuSaver::ImuSaver(const std::string path, bool bSaveMag)
 			fprintf(mpFile, "#timestamp,omega_x,omega_y,omega_z,alpha_x,alpha_y,alpha_z\n");
 	}
 	else {
-		printf("Open File Failed: %s\n", path);
+		printf("Open File Failed: %s\n", path.c_str());
 	}
 
 }

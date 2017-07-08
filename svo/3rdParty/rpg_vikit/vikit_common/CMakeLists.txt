@@ -22,13 +22,13 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -
 
 # Add plain cmake packages 
 FIND_PACKAGE(OpenCV REQUIRED)
-FIND_PACKAGE(Eigen REQUIRED)
+FIND_PACKAGE(Eigen3 REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
 
 # Include dirs
 INCLUDE_DIRECTORIES(
   include
-  ${Eigen_INCLUDE_DIRS}
+  ${EIGEN3_INCLUDE_DIR}
   ${OpenCV_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
 )
@@ -52,9 +52,7 @@ LIST(APPEND SOURCEFILES src/atan_camera.cpp
                         src/omni_camera.cpp
                         src/math_utils.cpp
                         src/vision.cpp
-                        src/performance_monitor.cpp
                         src/robust_cost.cpp
-                        src/user_input_thread.cpp
                         src/pinhole_camera.cpp
                         src/homography.cpp
                         src/img_align.cpp)

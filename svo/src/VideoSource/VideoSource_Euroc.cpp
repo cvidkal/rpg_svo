@@ -77,4 +77,36 @@ namespace slam {
 		return true;
 	}
 
+	bool VideoSourceEuroc::GetFrameStereo(cv::Mat &imgL, cv::Mat &imgR, double &timestamp) {
+		static int internal_idRight = 0;
+		int idx_got;
+		if (internal_id >= imgLeft.size())
+		{
+			std::cout << "No more Images" << endl;
+			return false;
+		}
+		bool hasSameTimeStamp = false;
+		do {
+			timestamp = imgLeft[internal_id].first;
+			internal_id++;
+			for (; internal_idRight <imgRight.size() ; ++internal_idRight) {
+				if(timestamp>imgRight[internal_idRight].first)
+					continue;
+				else if(timestamp == imgRight[internal_idRight].first)
+				{
+					hasSameTimeStamp = true;
+					break;
+				} else {
+					hasSameTimeStamp = false;
+					break;
+				}
+			}
+		}while(!hasSameTimeStamp&&internal_id<imgLeft.size());
+		if(!hasSameTimeStamp) return false;
+		imgL = cv::imread(imgLeft[internal_id].second);
+		imgR = cv::imread(imgRight[internal_id].second);
+		return true;
+
+	}
+
 }
