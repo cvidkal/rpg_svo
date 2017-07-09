@@ -132,6 +132,8 @@ void InertialSensor_Dataset::RunThread()
 	double timestamp; 
 
 	while (!mbThreadDone) {
+
+
 		{
 			std::unique_lock<std::mutex> ulock(mMutex);
 			// wait until new vision data arrives

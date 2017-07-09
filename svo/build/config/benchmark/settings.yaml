@@ -1,0 +1,52 @@
+%YAML:1.0
+
+#------------------------------------------------------------------------------
+# Common settings. note: 1 for true, 0 for false
+#------------------------------------------------------------------------------
+use_imu: 1
+use_hand_occlusion: 1
+use_tightly_coupled: 1
+use_tracking_thread: 1
+use_inverse_preintegration: 1
+use_fast_reinit: 1
+use_localMap: 0
+
+check_overlap: 0
+
+# video source: 0 - dataset, 1 - cameralib, 2 - TUM, 3 - benchmark, 4 - fingo
+video_source: 3
+
+# image debayer
+use_debayer: 1
+
+# output rate: 0 - image, 1 - imu
+output_rate: 0 
+
+#------------------------------------------------------------------------------
+# Dataset settings when video_source == 0 
+#------------------------------------------------------------------------------
+dataset_path: "E:/dataset/usens_difficult/"
+image_format: bmp
+
+#------------------------------------------------------------------------------
+# DSO settings
+#------------------------------------------------------------------------------
+preset: 5
+photometric_mode: 1
+linearizeOperation: 0
+run_fps: 60
+
+#------------------------------------------------------------------------------
+# Display settings
+#------------------------------------------------------------------------------
+disable_display: 0
+disable_pangolin: 0
+renderWindowFrames: 0
+show_residual: 0
+
+#------------------------------------------------------------------------------
+# Debug settings
+#------------------------------------------------------------------------------
+
+# debug log level: 0 - disable, 1 - important, ...
+debug_log_level: 1

@@ -1,0 +1,1 @@
+SLAMTest.exe mode=1 preset=5 nolog=1 quiet=1 

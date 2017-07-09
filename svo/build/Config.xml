@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opencv_storage>
+
+    <CameraType>"DS"</CameraType>
+    <CameraID>"0,0"</CameraID>
+    <CameraConfigFile>"config/us750/RGB_Config.xml"</CameraConfigFile>
+    <UseStereoRectify>0</UseStereoRectify>
+
+</opencv_storage>

@@ -14,10 +14,9 @@ SET(DEBUG_OUTPUT FALSE) # Only relevant if build without ROS
 
 ################################################################################
 
-SET(PROJECT_NAME svo)
+SET(PROJECT_NAME slam)
 PROJECT(${PROJECT_NAME})
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8.3)
-SET(CMAKE_BUILD_TYPE Release) # Release, RelWithDebInfo
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/CMakeModules/")
 
@@ -33,6 +32,7 @@ IF(USE_ROS)
 ENDIF()
 IF(DEBUG_OUTPUT)
   ADD_DEFINITIONS(-DSVO_DEBUG_OUTPUT)
+  define_property()
 ENDIF()
 
 # Set build flags, set ARM_ARCHITECTURE environment variable on Odroid
@@ -48,13 +48,15 @@ IF(CMAKE_COMPILER_IS_GNUCC)
 ELSE()
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ENDIF()
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -fsee -fomit-frame-pointer -fno-signed-zeros -fno-math-errno -funroll-loops")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -fsee -fomit-frame-pointer -fno-signed-zeros -fno-math-errno -funroll-loops")
 
 # Add plain cmake packages 
 FIND_PACKAGE(OpenCV REQUIRED)
 FIND_PACKAGE(Eigen3 REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
 FIND_PACKAGE(fast REQUIRED)
+FIND_PACKAGE(yaml-cpp REQUIRED)
+FIND_PACKAGE(pangolin REQUIRED)
 
 IF(USE_ROS)
   FIND_PACKAGE(catkin REQUIRED COMPONENTS roscpp roslib cmake_modules vikit_common vikit_ros)
@@ -77,6 +79,8 @@ INCLUDE_DIRECTORIES(
   ${OpenCV_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
   ${fast_INCLUDE_DIRS}
+        ${YAML_CPP_INCLUDE_DIR}
+        ${Pangolin_INCLUDE_DIR}
         src/
         src/IMU
 )
@@ -86,6 +90,9 @@ LIST(APPEND LINK_LIBS
   ${OpenCV_LIBS}
   ${Sophus_LIBRARIES}
   ${fast_LIBRARIES}
+        ${YAML_CPP_LIBRARIES}
+        viewer
+        ${Pangolin_LIBRARIES}
 )
 
 IF(USE_ROS)
@@ -149,30 +156,35 @@ IF(HAVE_G2O)
   LIST(APPEND SOURCEFILES src/bundle_adjustment.cpp)
 ENDIF(HAVE_G2O)
 
-# Create svo library
-ADD_LIBRARY(svo SHARED ${SOURCEFILES})
-TARGET_LINK_LIBRARIES(svo ${LINK_LIBS})
+# Create slam library
+ADD_LIBRARY(slam SHARED ${SOURCEFILES})
+ADD_LIBRARY(viewer SHARED src/Viewer/Viewer.cpp)
+TARGET_LINK_LIBRARIES(viewer ${Pangolin_LIBRARIES})
+TARGET_LINK_LIBRARIES(slam ${LINK_LIBS})
 
 ################################################################################
 # TESTS
+#
+#ADD_EXECUTABLE(test_feature_align test/test_feature_alignment.cpp)
+#TARGET_LINK_LIBRARIES(test_feature_align svo)
+#
+#ADD_EXECUTABLE(test_pipeline test/test_pipeline.cpp)
+#TARGET_LINK_LIBRARIES(test_pipeline svo)
+#
+#ADD_EXECUTABLE(test_matcher test/test_matcher.cpp)
+#TARGET_LINK_LIBRARIES(test_matcher svo)
+#
+#ADD_EXECUTABLE(test_feature_detection test/test_feature_detection.cpp)
+#TARGET_LINK_LIBRARIES(test_feature_detection svo)
+#
+#ADD_EXECUTABLE(test_depth_filter test/test_depth_filter.cpp)
+#TARGET_LINK_LIBRARIES(test_depth_filter svo)
+#
+#ADD_EXECUTABLE(test_sparse_img_align test/test_sparse_img_align.cpp)
+#TARGET_LINK_LIBRARIES(test_sparse_img_align svo)
+#
+#ADD_EXECUTABLE(test_pose_optimizer test/test_pose_optimizer.cpp)
+#TARGET_LINK_LIBRARIES(test_pose_optimizer svo)
 
-ADD_EXECUTABLE(test_feature_align test/test_feature_alignment.cpp)
-TARGET_LINK_LIBRARIES(test_feature_align svo)
-
-ADD_EXECUTABLE(test_pipeline test/test_pipeline.cpp)
-TARGET_LINK_LIBRARIES(test_pipeline svo)
-
-ADD_EXECUTABLE(test_matcher test/test_matcher.cpp)
-TARGET_LINK_LIBRARIES(test_matcher svo)
-
-ADD_EXECUTABLE(test_feature_detection test/test_feature_detection.cpp)
-TARGET_LINK_LIBRARIES(test_feature_detection svo)
-
-ADD_EXECUTABLE(test_depth_filter test/test_depth_filter.cpp)
-TARGET_LINK_LIBRARIES(test_depth_filter svo)
-
-ADD_EXECUTABLE(test_sparse_img_align test/test_sparse_img_align.cpp)
-TARGET_LINK_LIBRARIES(test_sparse_img_align svo)
-
-ADD_EXECUTABLE(test_pose_optimizer test/test_pose_optimizer.cpp)
-TARGET_LINK_LIBRARIES(test_pose_optimizer svo) 
+ADD_EXECUTABLE(test_system test/test_system.cpp)
+TARGET_LINK_LIBRARIES(test_system slam)

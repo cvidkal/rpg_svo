@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<opencv_storage>
+  <DeviceName>"USB Camera-OV580"</DeviceName>
+  <SensorType>"MONO"</SensorType>
+  
+  <SwapLeftRight>0</SwapLeftRight>
+  <CalibrationVersion>1</CalibrationVersion>
+  <CalibrationDir>"Calibrations/ov580_imu"</CalibrationDir>
+
+  <AutoExposure>0</AutoExposure>
+  <ApplyColorCorrection>0</ApplyColorCorrection>
+
+  <Exposure>-6</Exposure>
+  <Gain>2</Gain>
+  <ImageWidth>640</ImageWidth>
+  <ImageHeight>480</ImageHeight>
+
+  <Gamma>0</Gamma>
+  <Hue>0</Hue>
+
+  
+</opencv_storage>
+
+

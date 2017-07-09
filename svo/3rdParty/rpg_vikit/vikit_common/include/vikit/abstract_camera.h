@@ -8,7 +8,7 @@
 #ifndef ABSTRACT_CAMERA_H_
 #define ABSTRACT_CAMERA_H_
 
-#include <Eigen/Core>
+#include <Eigen/Dense>
 
 namespace vk
 {
@@ -26,7 +26,9 @@ protected:
 public:
 
   AbstractCamera() {}; // need this constructor for omni camera
-  AbstractCamera(int width, int height) : width_(width), height_(height) {};
+  AbstractCamera(int width, int height) : width_(width), height_(height) {mRic.setIdentity();mPic.setZero();};
+
+     void setCameraExtrinsicsToBody(const Eigen::Vector3d&Pic,const Eigen::Quaterniond&Ric){mPic = Pic;mRic = Ric;}
 
   virtual ~AbstractCamera() {};
 
@@ -70,6 +72,10 @@ public:
       return true;
     return false;
   }
+
+    //camera rotation and position wrt imu frame system
+    Eigen::Quaterniond mRic;
+    Eigen::Vector3d mPic;
 };
 
 } // end namespace CSfM

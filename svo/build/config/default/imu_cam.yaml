@@ -1,0 +1,51 @@
+%YAML:1.0
+#------------------------------------------------------------------------------
+# IMU Information
+#------------------------------------------------------------------------------
+
+# IMU name
+sensor_name: "YEI"
+
+# IMU sampling rate. Hz
+sample_rate: 500
+
+#------------------------------------------------------------------------------
+# IMU camera relationship. Adjust them!
+#------------------------------------------------------------------------------
+
+# Rotation matrix that transform from imu frame to camera frame
+Rci: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: f
+   data: [ 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0 ]
+
+# postion from imu to camera in camera frame
+Pci: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: f
+   data: [ 0.005, 0.025, -0.01 ]
+
+# t_imu - t_cam. unit is second
+timeshift_cam_imu: -0.01954539628739167
+  
+#------------------------------------------------------------------------------
+# IMU Noise Parameters - continuous. Adjust them!
+#------------------------------------------------------------------------------
+
+# Gyroscope "white noise". rad/s/sqrt(Hz)
+gyro_noise_density: 4.0e-4
+
+# Gyroscope "random walk". rad/s^2/sqrt(Hz)
+gyro_random_walk: 1.0e-5
+
+# Accelerometer "white noise". m/s^2/sqrt(Hz)
+acc_noise_density: 0.002
+
+# Accelerometer "random walk". m/s^3/sqrt(Hz)
+acc_random_walk: 2.0e-5
+
+
+
+

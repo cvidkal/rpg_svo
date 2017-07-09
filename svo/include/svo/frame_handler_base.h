@@ -91,7 +91,7 @@ public:
 
   virtual void alignCoorindateSystem(const Eigen::Matrix3d&dR, const Eigen::Vector3d&dP, const double dScale){};
 
-  virtual void plugIMUSystem(){};
+
 protected:
   Stage stage_;                 //!< Current stage of the algorithm.
   bool set_reset_;              //!< Flag that the user can set. Will reset the system before the next iteration.

@@ -1,0 +1,1 @@
+DSO.exe videosource=1 calib=dataset\usens_0411\camera.txt mode=1 preset=5 nolog=1 quiet=1

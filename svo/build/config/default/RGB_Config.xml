@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<opencv_storage>
+  <DeviceName>"FX3"</DeviceName>
+  <SensorType>"RGB"</SensorType>
+  
+  <CalibrationDir>"Calibrations/calib_Natalie_rgb_0922"</CalibrationDir>
+
+  <AutoExposure>0</AutoExposure>
+  <ApplyColorCorrection>0</ApplyColorCorrection>
+
+  <Exposure>-5</Exposure>
+  <Gain>1</Gain>
+  <ImageWidth>640</ImageWidth>
+  <ImageHeight>480</ImageHeight>
+
+  <Gamma>1</Gamma>
+  <Hue>0</Hue>
+
+  
+</opencv_storage>
+
+

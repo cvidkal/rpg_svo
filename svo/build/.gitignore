@@ -1,0 +1,15 @@
+dataset/
+logs/
+mats/
+*.exe
+*.pdb
+*.dll
+*.log
+*.ilk
+*.exp
+Calibrations/
+result.txt
+slam_pose.txt
+slam_pose_removed_lostframe.txt
+lost_frame.txt
+dataset*
