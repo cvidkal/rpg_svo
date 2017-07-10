@@ -12,7 +12,7 @@
 class Viewer {
     typedef std::pair<double,Eigen::Matrix4d> Estimate;
 public:
-    Viewer(int width, int height);
+    Viewer(int imgWidth, int imgHeight);
 
     ~Viewer();
 
@@ -31,9 +31,13 @@ private:
     pangolin::OpenGlRenderState cameraMatrix_;
 
     int Mode_;
+    std::mutex dataLock_;
     std::vector<Estimate,Eigen::aligned_allocator<Estimate>> estimates_imu_,estimate_vision_;
 
     Eigen::Matrix3d Kinv_,K_;
+    const int mbUIWidth = 180;
+    const int mbImgWidth,mbImgHeight;
+    const float mbAspect;
 };
 
 

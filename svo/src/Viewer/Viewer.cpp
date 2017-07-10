@@ -7,15 +7,15 @@
 #include <Eigen/Eigen>
 
 
-Viewer::Viewer(int width,int height){
+Viewer::Viewer(int imgWidth,int imgHeight):mbImgWidth(imgWidth),mbImgHeight(imgHeight),mbAspect(float(mbImgWidth)/mbImgHeight){
 
     mbRunning = true;
-    pangolin::CreateWindowAndBind("Main",width,height);
+    pangolin::CreateWindowAndBind("Main",mbImgWidth+mbUIWidth,mbImgHeight);
     glEnable(GL_DEPTH_TEST);
 
     // Define Projection and initial ModelView matrix
     cameraMatrix_ =  pangolin::OpenGlRenderState(
-            pangolin::ProjectionMatrix(width,height,420,420,width/2,height/2,0.2,100),
+            pangolin::ProjectionMatrix(mbImgWidth,mbImgHeight,420,420,mbImgWidth/2,mbImgHeight/2,0.2,100),
             pangolin::ModelViewLookAt(0,0,10, 0,0,-4, pangolin::AxisY)
     );
 }
@@ -25,11 +25,9 @@ Viewer::~Viewer(){
 }
 
 void Viewer::run(){
-
+//    std::thread* viewer = new std::thread(&Viewer::mainLoop,this);
+//    viewer->detach();
     mainLoop();
-    std::thread* viewer = new std::thread(&Viewer::mainLoop,this);
-    viewer->join();
-
 }
 
 
@@ -51,18 +49,17 @@ void Viewer::mainLoop(){
 
 
     //UI
-    const int UI_WIDTH = 180;
     // Add named OpenGL viewport to window and provide 3D Handler
     pangolin::Handler3D handler(cameraMatrix_);
     pangolin::View& space3 = pangolin::CreateDisplay()
-            .SetBounds(0.0, 1.0, pangolin::Attach::Pix(UI_WIDTH), 1.0, -640.0f/480.0f)
+            .SetBounds(0.0, 1.0, pangolin::Attach::Pix(mbUIWidth), 1.0, -mbAspect)
             .SetHandler(&handler);
 
 
     // Add named Panel and bind to variables beginning 'ui'
     // A Panel is just a View with a default layout and input handling
     pangolin::CreatePanel("ui")
-            .SetBounds(0.0, 1.0, 0.0, pangolin::Attach::Pix(UI_WIDTH));
+            .SetBounds(0.0, 1.0, 0.0, pangolin::Attach::Pix(mbUIWidth));
 
 
     pangolin::Var<bool> ViewMode("ui.ViewMode",false,false);
@@ -83,36 +80,50 @@ void Viewer::mainLoop(){
 
 
         //-----------------3D Mode------------------
-        if(ViewMode.Get()){
-
-        space3.Activate(cameraMatrix_);//set ViewMatrix
+        if(ViewMode.Get()) {
+            std::lock_guard<std::mutex> lck(dataLock_);
+            space3.Activate(cameraMatrix_);//set ViewMatrix
 
             // Draw Objects
-            if(VideoMode.Get()){
+            if (VideoMode.Get()) {
                 static int internal_id_imu = 0;
                 static int internal_id_vision = 0;
-                if(internal_id_imu<estimates_imu_.size()&&internal_id_vision<estimate_vision_.size()){
+                int N_IMU = estimates_imu_.size();
+                int N_Vision = estimate_vision_.size();
+                int exit = -1;
+                if (internal_id_imu < N_IMU && internal_id_vision < N_Vision) {
                     double ts_imu = estimates_imu_[internal_id_imu].first;
                     double ts_vision = estimate_vision_[internal_id_vision].first;
-                    if(ts_imu<ts_vision){
-                        pangolin::glDrawAxis<double>(estimates_imu_[internal_id_imu].second,2.0);
-                        internal_id_imu++;
-                    }
-                    else{
-
-                    }
+                    exit = ts_imu<ts_vision?0:1;
                 }
-
+                else if(internal_id_imu<N_IMU)
+                    exit =0;
+                else if(internal_id_imu<N_Vision)
+                    exit = 1;
+                if(exit == 0){
+                    pangolin::glDrawAxis<double>(estimates_imu_[internal_id_imu].second, 2.0);
+                    internal_id_imu++;
+                }else if(exit == 1){
+                    pangolin::glDrawFrustrum<double>(Kinv_, mbImgWidth, mbImgHeight, estimate_vision_[internal_id_vision].second,
+                                                     2.);
+                    internal_id_vision++;
+                }
             }
-
-        // Render OpenGL Cube
-        pangolin::glDrawColouredCube();
-//        pangolin::glDrawFrustrum<double>(Kinv,640,480,T,5.);
-        pangolin::glDrawAxis<double>(T,2.);
-        // Swap frames and Process Events
+            else{
+                for(auto&est:estimates_imu_){
+                    pangolin::glDrawAxis<double>(est.second, 2.0);
+                }
+                for(auto&est:estimate_vision_){
+                    pangolin::glDrawFrustrum<double>(Kinv_, mbImgWidth, mbImgHeight, est.second,
+                                                     2.);
+                }
+            }
         }
             //------------------2D Mode------------------
         else{
+
+
+
 
         }
 
@@ -126,14 +137,15 @@ void Viewer::mainLoop(){
 }
 
 void Viewer::pushIMUEstimate(double timestamp, Eigen::Matrix<double, 4, 4, 0, 4, 4> Twi) {
-
-    Twi.row(1) *=-1;
-    Twi.row(2) *=-1;
-    estimates_imu_.emplace_back(timestamp,Twi);
+    std::lock_guard<std::mutex> lck(dataLock_);
+    Twi.row(1) *= -1;
+    Twi.row(2) *= -1;
+    estimates_imu_.emplace_back(timestamp, Twi);
 }
 
 
 void Viewer::pushVisionEstimate(double timestamp, Eigen::Matrix<double, 4, 4, 0, 4, 4> Twf) {
+    std::lock_guard<std::mutex> lck(dataLock_);
     Twf.row(1) *=-1;
     Twf.row(2) *=-1;
     estimate_vision_.emplace_back(timestamp,Twf);

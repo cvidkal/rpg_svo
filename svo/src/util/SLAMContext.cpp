@@ -138,7 +138,7 @@ bool SLAMContext::loadSettings()
 	// Dataset Settings
 
 	// dataset path
-	if (video_source == 0) {
+	if (video_source == 0||video_source == 6) {
 		// dataset path
 		dataset_path = getSetting(fs, "dataset_path", getConfigDirectory());
 

@@ -9,9 +9,8 @@ using namespace slam;
 
 int main(){
 
-//    SlamSystem system;
-
-    Viewer * viewer = new Viewer(640,480);
-    viewer->run();
+    SlamSystem system;
+    system.init();
+    system.run();
 
 }

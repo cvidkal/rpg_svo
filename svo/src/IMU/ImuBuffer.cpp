@@ -186,7 +186,7 @@ int ImuBuffer::GetDataByTimestamp(double timestamp, ImuData& imuData) const
 
 	// predict quaternion
 	float dt = timestamp - imuData_1.timestamp;
-	Eigen::Vector3f dPhi = imuData.gyro * (0.5f * dt);
+	Eigen::Vector3f dPhi = imuData.gyro * (0.5f * dt);//constant angular acceleration
 	Eigen::Quaternionf dq(1, dPhi[0], dPhi[1], dPhi[2]);
 	imuData.q = imuData_1.q * dq;
 

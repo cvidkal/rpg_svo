@@ -6,6 +6,8 @@
 #include "VideoSource/VideoSource.h"
 #include <svo/frame_handler_mono.h>
 #include <vikit/abstract_camera.h>
+#include <Viewer/Viewer.h>
+
 namespace  slam {
 	class SlamSystem
 	{
@@ -21,6 +23,9 @@ namespace  slam {
 		VideoSource* video_source_;
 		FrameHandlerMono* vision_;
 		vk::AbstractCamera* cam0;
+		Viewer* viewer;
+		ImuBuffer* mpImuBuffer;
+		ImuEstimator* mpImuEstimator;
 	};
 
 }

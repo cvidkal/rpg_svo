@@ -25,18 +25,43 @@ namespace  slam {
             vision_ = new FrameHandlerMono(cam0);
         }
 
+
 		switch (SLAM_CONTEXT.video_source)
 		{
 		case 6:
 			video_source_ = new VideoSourceEuroc();
 		}
 
-
+		viewer = new Viewer(cam0->width(),cam0->height());
+        mpImuBuffer = ImuMgr.getImuBuffer();
+        mpImuEstimator = new ImuEstimator();
+        mpImuEstimator->Reset();
 	}
 
 	void SlamSystem::run() {
 
-
+        std::thread* mainThread = new std::thread(
+                [&]() {
+            cv::Mat img;
+            double timestamp, ex;
+            video_source_->GetFrame(img, timestamp, ex);
+            ImuData imuData;
+            mpImuBuffer->GetDataByTimestamp(timestamp, imuData);
+            Eigen::Matrix3d Rwi = imuData.q.cast<double>().matrix();
+            double fps = 200;
+            double step = 1 / 200;
+            while (mpImuBuffer->GetDataByTimestamp(timestamp, imuData) >= 0) {
+                Eigen::Matrix4d T;
+                T.setIdentity();
+                Eigen::Matrix3d Rwi = imuData.q.cast<double>().matrix();
+                T.topLeftCorner(3, 3) = Rwi;
+                viewer->pushIMUEstimate(timestamp, T);
+                timestamp += step;
+                this_thread::sleep_for(std::chrono::nanoseconds((long long) (step * 1e9)));
+            }
+        });
+        viewer->run();
+        mainThread->join();
 
 	}
 
