@@ -25,8 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_VARWRAPPER_H
-#define PANGOLIN_VARWRAPPER_H
+#pragma once
 
 #include <pangolin/var/varvaluegeneric.h>
 #include <pangolin/compat/type_traits.h>
@@ -39,7 +38,7 @@ template<typename T, typename S>
 class VarWrapper : public VarValueT<T>
 {
 public:
-    typedef typename boostd::remove_reference<S>::type VarS;
+    typedef typename std::remove_reference<S>::type VarS;
 
     VarWrapper(VarValueT<S>& src)
         : src(src)
@@ -90,5 +89,3 @@ protected:
 };
 
 }
-
-#endif // PANGOLIN_VARWRAPPER_H

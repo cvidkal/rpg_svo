@@ -25,8 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_OPENGLRENDERSTATE_H
-#define PANGOLIN_OPENGLRENDERSTATE_H
+#pragma once
 
 #include <pangolin/platform.h>
 #include <pangolin/utils/simple_math.h>
@@ -265,6 +264,11 @@ TooN::Matrix<4,4> ToTooN(const OpenGlMatrixSpec& ms);
 TooN::SE3<> ToTooN_SE3(const OpenGlMatrixSpec& ms);
 #endif
 
+#ifdef HAVE_EIGEN
+template<typename P>
+Eigen::Matrix<P,4,4> ToEigen(const OpenGlMatrix& ms);
+#endif
+
 }
 
 // Inline definitions
@@ -296,14 +300,21 @@ OpenGlMatrix::OpenGlMatrix(const Eigen::Matrix<P,4,4>& mat)
 template<typename P>
 OpenGlMatrix::operator Eigen::Matrix<P,4,4>() const
 {
+    return ToEigen<P>(*this);
+}
+
+template<typename P> inline
+Eigen::Matrix<P,4,4> ToEigen(const OpenGlMatrix& ms)
+{
     Eigen::Matrix<P,4,4> mat;
     for(int r=0; r<4; ++r ) {
         for(int c=0; c<4; ++c ) {
-            mat(r,c) = (P)m[c*4+r];
+            mat(r,c) = (P)ms.m[c*4+r];
         }
     }
     return mat;
 }
+
 #endif // USE_EIGEN
 
 #ifdef HAVE_TOON
@@ -412,5 +423,3 @@ inline OpenGlMatrix::operator const OVR::Matrix4f() const
 
 
 }
-
-#endif // PANGOLIN_OPENGLRENDERSTATE_H

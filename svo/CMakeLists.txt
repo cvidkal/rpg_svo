@@ -1,8 +1,3 @@
-################################################################################
-set(EIGEN3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
-set(OpenCV_DIR $ENV{LIBOPENCV247} )
-set(OpenCV_STATIC ON)
-add_subdirectory(3rdParty)
 
 ################################################################################
 # user build settings
@@ -17,6 +12,14 @@ SET(DEBUG_OUTPUT FALSE) # Only relevant if build without ROS
 SET(PROJECT_NAME slam)
 PROJECT(${PROJECT_NAME})
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8.3)
+
+################################################################################
+set(EIGEN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdParty/eigen_3.2.10)
+set(OpenCV_DIR $ENV{LIBOPENCV247} )
+set(OpenCV_STATIC ON)
+add_subdirectory(3rdParty)
+################################################################################
+
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/CMakeModules/")
 
@@ -37,7 +40,7 @@ ENDIF()
 
 # Set build flags, set ARM_ARCHITECTURE environment variable on Odroid
 # Set build flags. Set IS_ARM on odroid board as environment variable
-SET(CMAKE_CXX_FLAGS "-Wall -D_LINUX -D_REENTRANT -march=native -Wno-unused-variable -Wno-unused-const-variable -Wno-unknown-pragmas")
+SET(CMAKE_CXX_FLAGS "-Wall -D_LINUX -D_REENTRANT -std=c++11 -march=native -Wno-unused-variable -Wno-unused-const-variable -Wno-unknown-pragmas")
 IF(DEFINED ENV{ARM_ARCHITECTURE})
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfpu=neon -march=armv7-a")
 ELSE()
@@ -52,11 +55,11 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -fsee -fomit-frame-pointer -fno-
 
 # Add plain cmake packages 
 FIND_PACKAGE(OpenCV REQUIRED)
-FIND_PACKAGE(Eigen3 REQUIRED)
+FIND_PACKAGE(Eigen REQUIRED)
 FIND_PACKAGE(Sophus REQUIRED)
 FIND_PACKAGE(fast REQUIRED)
-FIND_PACKAGE(yaml-cpp REQUIRED)
-FIND_PACKAGE(pangolin REQUIRED)
+#FIND_PACKAGE(yaml-cpp REQUIRED)
+FIND_PACKAGE(Pangolin REQUIRED)
 
 IF(USE_ROS)
   FIND_PACKAGE(catkin REQUIRED COMPONENTS roscpp roslib cmake_modules vikit_common vikit_ros)
@@ -75,7 +78,7 @@ ENDIF()
 # Include dirs
 INCLUDE_DIRECTORIES(
   include
-  ${EIGEN3_INCLUDE_DIR}
+  ${EIGEN_INCLUDE_DIR}
   ${OpenCV_INCLUDE_DIRS}
   ${Sophus_INCLUDE_DIRS}
   ${fast_INCLUDE_DIRS}
@@ -180,8 +183,8 @@ TARGET_LINK_LIBRARIES(slam ${LINK_LIBS})
 #ADD_EXECUTABLE(test_depth_filter test/test_depth_filter.cpp)
 #TARGET_LINK_LIBRARIES(test_depth_filter svo)
 #
-#ADD_EXECUTABLE(test_sparse_img_align test/test_sparse_img_align.cpp)
-#TARGET_LINK_LIBRARIES(test_sparse_img_align svo)
+ADD_EXECUTABLE(test_sparse_img_align test/test_sparse_img_align.cpp)
+TARGET_LINK_LIBRARIES(test_sparse_img_align slam)
 #
 #ADD_EXECUTABLE(test_pose_optimizer test/test_pose_optimizer.cpp)
 #TARGET_LINK_LIBRARIES(test_pose_optimizer svo)

@@ -5,7 +5,7 @@
 namespace pangolin
 {
 
-inline Colour ParseJson(const json::value& val)
+inline Colour ParseJson(const picojson::value& val)
 {
     return Colour(
         val.contains("r") ? val["r"].get<double>() : 0.0,
@@ -15,9 +15,9 @@ inline Colour ParseJson(const json::value& val)
     );
 }
 
-inline json::value toJson(const Colour& colour)
+inline picojson::value toJson(const Colour& colour)
 {
-    json::value ret(json::object_type,true);
+    picojson::value ret(picojson::object_type,true);
     ret["r"] = colour.r;
     ret["g"] = colour.g;
     ret["b"] = colour.b;
@@ -33,8 +33,8 @@ inline std::ostream& operator<<(std::ostream& os, const Colour& colour)
 
 inline std::istream& operator>>(std::istream& is, Colour& colour)
 {
-    json::value val;
-    json::parse(val,is);
+    picojson::value val;
+    picojson::parse(val,is);
     colour = ParseJson(val);
     return is;
 }
@@ -201,7 +201,7 @@ inline std::string CommonPrefix(const std::vector<std::string>& vec)
     return vec[0].substr(0,cmn);
 }
 
-void ConsoleView::Keyboard(View&, unsigned char key, int x, int y, bool pressed)
+void ConsoleView::Keyboard(View&, unsigned char key, int /*x*/, int /*y*/, bool pressed)
 {
     static int hist_id = -1;
     static std::string prefix;

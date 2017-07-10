@@ -23,9 +23,6 @@ Find the latest version on [Github](http://github.com/stevenlovegrove/Pangolin):
 git clone https://github.com/stevenlovegrove/Pangolin.git
 ```
 
-Current build status on [Drone.io](https://drone.io/github.com/stevenlovegrove/Pangolin)
-![Build Status](https://drone.io/github.com/stevenlovegrove/Pangolin/status.png)
-
 ## Dependencies ##
 
 Optional dependencies are enabled when found, otherwise they are silently disabled.
@@ -33,10 +30,12 @@ Check the CMake configure output for details.
 
 ### Required Dependencies ###
 
+* C++11
+
 * OpenGL (Desktop / ES / ES2)
 
 * Glew
- * (win) built automatically
+ * (win) built automatically (assuming git is on your path)
  * (deb) sudo apt-get install libglew-dev
  * (mac) sudo port install glew
 
@@ -46,11 +45,6 @@ Check the CMake configure output for details.
  * (mac) sudo port install cmake
 
 ### Recommended Dependencies ###
-
-* Boost (optional with C++11. Configure with 'cmake -DCPP11_NO_BOOST=1 ..' )
- * (win) http://www.boost.org/users/download/
- * (deb) sudo apt-get install libboost-dev libboost-thread-dev libboost-filesystem-dev
- * (mac) sudo port install boost
 
 * Python2 / Python3, for drop-down interactive console
  * (win) http://www.python.org/downloads/windows
@@ -87,15 +81,14 @@ Check the CMake configure output for details.
 ## Building ##
 
 Pangolin uses the CMake portable pre-build tool. To checkout and build pangolin in the
-directory 'build', enabling C++11 support instead of using Boost, execute the
-following at a shell (or the equivelent using a GUI):
+directory 'build', execute the following at a shell (or the equivelent using a GUI):
 
 ```
 git clone https://github.com/stevenlovegrove/Pangolin.git
 cd Pangolin
 mkdir build
 cd build
-cmake -DCPP11_NO_BOOST=1 ..
+cmake ..
 make -j
 ```
 
@@ -106,9 +99,30 @@ can execute:
 make doc
 ```
 
+**On Windows**, Pangolin will attempt to download and build *glew*, *libjpeg*, *libpng* and *zlib* automatically. It does so assuming that git is available on the path - this assumption may be wrong for windows users who have downloaded Pangolin via a zip file on github. You will instead need to download and compile the dependencies manually, and set the BUILD_EXTERN_(lib) options to false for these libraries. The alternate and recommended approach is to install [gitbash](https://git-scm.com/downloads) and work from within their provided console.
+
 ## Issues ##
 
-Please visit [Github Issues](https://github.com/stevenlovegrove/Pangolin/issues) to view and report problems with Pangolin. Issues and pull requests should be raised against the devel branch which contains the current development version.
+Please visit [Github Issues](https://github.com/stevenlovegrove/Pangolin/issues) to view and report problems with Pangolin. Issues and pull requests should be raised against the master branch which contains the current development version.
 
-Please note; most Pangolin dependencies are optional - to disable a dependency which may be causing trouble on your machine, simply blank out it's include and library directories with a cmake configuration tool (e.g. ccmake or cmake-gui).
+Please note; most Pangolin dependencies are optional - to disable a dependency which may be causing trouble on your machine, set the BUILD_PANGOLIN_(option) variable to false with a cmake configuration tool (e.g. ccmake or cmake-gui).
 
+## Contributions and Continuous Integration ##
+
+For CI, Pangolin uses [travis-ci.org](https://travis-ci.org/stevenlovegrove/Pangolin) for Ubuntu, OSX and [ci.appveyor.com](https://ci.appveyor.com/project/stevenlovegrove/pangolin) for Windows.
+
+To contribute to Pangolin, I would appreciate pull requests against the master branch. This will trigger CI builds for your changes automatically, and help me to merge with confidence.
+
+## Binaries ##
+
+Binaries are available for Windows x64, as output by the Windows CI server: [Appveyor Artifacts](https://ci.appveyor.com/project/stevenlovegrove/pangolin/build/artifacts).
+
+## Acknowledgements ##
+
+I'd like to thank the growing number of kind contributors to Pangolin for helping to make it more stable and feature rich. Many features of Pangolin have been influenced by other projects such as GFlags, GLConsole, and libcvd in particular. I'd also like to thank the FOSS projects on which Pangolin depends.
+
+For a summary of those who have made code contributions, execute:
+
+```
+git shortlog -sne
+```

@@ -107,7 +107,7 @@ static PyMethodDef PangoMethods[] = {
 #if defined(BUILD_PANGOLIN_GUI) && defined(BUILD_PANGOLIN_VIDEO)
     {"record_window",  pangolin_record_window, METH_VARARGS, "Record window contents to video file."},
 #endif // defined(BUILD_PANGOLIN_GUI) && defined(BUILD_PANGOLIN_VIDEO)
-    {NULL}
+    {NULL, NULL, 0, NULL}
 };
 
 #if PY_MAJOR_VERSION >= 3
@@ -128,7 +128,7 @@ InitPangoModule()
 #ifdef BUILD_PANGOLIN_VARS
     // Default settings
     Var<std::string>("pango.console.default_filename", "vars.json");
-    Var<std::string>("pango.console.default_record_uri", "ffmpeg:[fps=50,bps=8388608,unique_filename]//screencap.avi");
+    Var<std::string>("pango.console.default_record_uri", "pango:[unique_filename]//screencap.pango");
 
     PyObject *m = 0;
 #if PY_MAJOR_VERSION >= 3

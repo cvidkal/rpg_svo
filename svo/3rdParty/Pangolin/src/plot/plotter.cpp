@@ -25,11 +25,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <pangolin/plot/plotter.h>
 #include <pangolin/gl/gldraw.h>
+#include <pangolin/plot/plotter.h>
 
-#include <iomanip>
 #include <cctype>
+#include <iomanip>
 
 namespace pangolin
 {
@@ -65,7 +65,7 @@ std::set<int> ConvertSequences(const std::string& str, char seq_char='$', char i
 }
 
 Plotter::PlotSeries::PlotSeries()
-    : drawing_mode(GL_LINE_STRIP)
+    : log(nullptr), drawing_mode(GL_LINE_STRIP)
 {
 
 }
@@ -190,7 +190,7 @@ void Plotter::PlotImplicit::CreateInequality(const std::string& ie, Colour c)
     CreatePlot( oss.str() );
 }
 
-void Plotter::PlotImplicit::CreateDistancePlot(const std::string& dist)
+void Plotter::PlotImplicit::CreateDistancePlot(const std::string& /*dist*/)
 {
 
 }
@@ -201,7 +201,7 @@ Plotter::Plotter(
     float tickx, float ticky,
     Plotter* linked_plotter_x,
     Plotter* linked_plotter_y
-)   : log(log),
+)   : default_log(log),
       colour_wheel(0.6f),
       rview_default(left,right,bottom,top), rview(rview_default), target(rview),
       selection(0,0,0,0),
@@ -326,7 +326,7 @@ void Plotter::ComputeTrackValue( float track_val[2] )
 {
     if(trigger_edge) {
         // Track last edge transition matching trigger_edge
-        const DataLogBlock* block = log->LastBlock();
+        const DataLogBlock* block = default_log->LastBlock();
         if(block) {
             int s = (int)block->StartId() + (int)block->Samples() - 1;
             const size_t dim = block->Dimensions();
@@ -347,7 +347,7 @@ void Plotter::ComputeTrackValue( float track_val[2] )
         // Fall back to simple last value tracking
     }
 
-    track_val[0] = (float)log->Samples();
+    track_val[0] = (float)default_log->Samples();
     track_val[1] = 0.0f;
 }
 
@@ -356,7 +356,7 @@ XYRangef Plotter::ComputeAutoSelection()
     XYRangef range;
     range.x = target.x;
 
-    const DataLogBlock* block = log->FirstBlock();
+    const DataLogBlock* block = default_log->FirstBlock();
 
     if(block) {
         for(size_t i=0; i < plotseries.size(); ++i)
@@ -364,8 +364,8 @@ XYRangef Plotter::ComputeAutoSelection()
             if( plotseries[i].attribs.size() == 2 && plotseries[i].attribs[0].plot_id == -1) {
                 const int id = plotseries[i].attribs[1].plot_id;
                 if( 0<= id && id < (int)block->Dimensions()) {
-                    range.y.Insert(log->Stats(id).min);
-                    range.y.Insert(log->Stats(id).max);
+                    range.y.Insert(default_log->Stats(id).min);
+                    range.y.Insert(default_log->Stats(id).max);
                 }
             }
 
@@ -385,7 +385,21 @@ void Plotter::Render()
 #endif
 
     glClearColor(colour_bg.r, colour_bg.g, colour_bg.b, colour_bg.a);
-    ActivateScissorAndClear();
+    ActivateAndScissor();
+
+    if(std::isfinite(colour_bg.a)) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    if(extern_draw_function && show) {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(rview.x.min, rview.x.max, rview.y.max, rview.y.min, -1, 1);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        extern_draw_function(*this);
+    }
 
     // Try to create smooth lines
     glDisable(GL_MULTISAMPLE);
@@ -397,8 +411,8 @@ void Plotter::Render()
     glDisable(GL_LIGHTING);
     glDisable( GL_DEPTH_TEST );
 
-    const float w = rview.x.Size();
-    const float h = rview.y.Size();
+    const float w = rview.x.AbsSize();
+    const float h = rview.y.AbsSize();
     const float ox = -rview.x.Mid();
     const float oy = -rview.y.Mid();
     const float sx = 2.0f / w;
@@ -412,9 +426,34 @@ void Plotter::Render()
     prog_lines.SetUniform("u_color",  colour_tk );
 
     const float min_space = 80.0;
-    int ta[2] = {1,1};
-    while(v.w * ta[0] *tick[0].val / w < min_space) ta[0] *=2;
-    while(v.h * ta[1] *tick[1].val / h < min_space) ta[1] *=2;
+    float ta[2] = {1,1};
+
+    while(true)
+    {
+        const float interval = v.w * tick[0].val / w;
+
+        if(ta[0] * interval < min_space)
+            ta[0] *=2;
+        if(ta[0] * interval < min_space)
+            ta[0] =(5*ta[0])/2;
+        if(ta[0] * interval < min_space)
+            ta[0] *=2;
+        else
+            break;
+    }
+    while(true)
+    {
+        const float interval = v.h * tick[1].val / h;
+
+        if(ta[1] * interval < min_space)
+            ta[1] *=2;
+        if(ta[1] * interval < min_space)
+            ta[1] =(5*ta[1])/2;
+        if(ta[1] * interval < min_space)
+            ta[1] *=2;
+        else
+            break;
+    }
 
     const float tdelta[2] = {
         tick[0].val * ta[0],
@@ -473,6 +512,7 @@ void Plotter::Render()
     for(size_t i=0; i < plotseries.size(); ++i)
     {
         PlotSeries& ps = plotseries[i];
+
         GlSlProgram& prog = ps.prog;
         ps.used = false;
 
@@ -480,6 +520,10 @@ void Plotter::Render()
         prog.SetUniform("u_scale",  sx, sy);
         prog.SetUniform("u_offset", ox, oy);
         prog.SetUniform("u_color", ps.colour );
+
+        // TODO: Try to skip drawing of blocks which aren't in view.
+        DataLog* log = ps.log ? ps.log : default_log;
+        std::lock_guard<std::mutex> l(log->access_mutex);
 
         const DataLogBlock* block = log->FirstBlock();
         while(block) {
@@ -536,23 +580,17 @@ void Plotter::Render()
 
     for( size_t i=0; i < plotmarkers.size(); ++i) {
         const Marker& m = plotmarkers[i];
+
+        XYRangef draw_range = m.range;
+        draw_range.Clamp(rview);
+
         prog_lines.SetUniform("u_color",  m.colour );
-        if(m.direction == Marker::Horizontal) {
-            if(m.leg == 0) {
-                glDrawLine(rview.x.min, m.value,  rview.x.max, m.value );
-            }else if(m.leg == -1) {
-                glDrawRect(rview.x.min, rview.y.min,  rview.x.max, m.value);
-            }else if(m.leg == 1) {
-                glDrawRect(rview.x.min, m.value,  rview.x.max, rview.y.max);
-            }
+        if(draw_range.x.Size() == 0.0  || draw_range.y.Size() == 0.0) {
+            // Horizontal or Vertical line
+            glDrawLine(draw_range.x.min, draw_range.y.min,  draw_range.x.max, draw_range.y.max );
         }else{
-            if(m.leg == 0) {
-                glDrawLine(m.value, rview.y.min,  m.value, rview.y.max );
-            }else if(m.leg == -1) {
-                glDrawRect(rview.x.min, rview.y.min,  m.value, rview.y.max );
-            }else if(m.leg == 1) {
-                glDrawRect(m.value, rview.y.min,  rview.x.max, rview.y.max );
-            }
+            // Region
+            glDrawRect(draw_range.x.min, draw_range.y.min,  draw_range.x.max, draw_range.y.max );
         }
     }
 
@@ -864,7 +902,7 @@ void Plotter::ResetView()
     py.target.y = py.rview_default.y;
 }
 
-void Plotter::Keyboard(View&, unsigned char key, int x, int y, bool pressed)
+void Plotter::Keyboard(View&, unsigned char key, int /*x*/, int /*y*/, bool pressed)
 {
     const float mvfactor = 1.0f / 10.0f;
 
@@ -1017,12 +1055,12 @@ void Plotter::MouseMotion(View& view, int x, int y, int button_state)
     last_mouse_pos[1] = y;
 }
 
-void Plotter::PassiveMouseMotion(View&, int x, int y, int button_state)
+void Plotter::PassiveMouseMotion(View&, int x, int y, int /*button_state*/)
 {
     ScreenToPlot(x, y, hover[0], hover[1]);
 }
 
-void Plotter::Special(View&, InputSpecial inType, float x, float y, float p1, float p2, float p3, float p4, int button_state)
+void Plotter::Special(View&, InputSpecial inType, float x, float y, float p1, float p2, float /*p3*/, float /*p4*/, int button_state)
 {
     if(inType == InputSpecialScroll) {
         const float d[2] = {p1,-p2};
@@ -1056,16 +1094,16 @@ void Plotter::Special(View&, InputSpecial inType, float x, float y, float p1, fl
     ScreenToPlot( (int)x, (int)y, hover[0], hover[1]);
 }
 
-void Plotter::AddSeries(
-    const std::string& x_expr, const std::string& y_expr,
+void Plotter::AddSeries(const std::string& x_expr, const std::string& y_expr,
     DrawingMode drawing_mode, Colour colour,
-    const std::string& title
-) {
+    const std::string& title, DataLog *log)
+{
     if( !std::isfinite(colour.r) ) {
         colour = colour_wheel.GetUniqueColour();
     }
     plotseries.push_back( PlotSeries() );
     plotseries.back().CreatePlot(x_expr, y_expr, colour, (title == "$y") ? y_expr : title);
+    plotseries.back().log = log;
     plotseries.back().drawing_mode = (GLenum)drawing_mode;
 }
 
@@ -1076,7 +1114,12 @@ void Plotter::ClearSeries()
 
 Marker& Plotter::AddMarker(Marker::Direction d, float value, Marker::Equality leg, Colour c )
 {
-    plotmarkers.push_back( Marker(d,value,leg,c) );
+    return AddMarker(Marker(d,value,leg,c));
+}
+
+Marker& Plotter::AddMarker( const Marker& marker )
+{
+    plotmarkers.push_back( marker );
     return plotmarkers.back();
 }
 

@@ -26,9 +26,13 @@
 #elif TARGET_OS_MAC == 1
 /* OSX */
 #define  PLATFORM_OSX
+
 #else
 #error "Unknown Apple OS platform"
 #endif //APPLE_PLATFORM_DEFINE
+
+#elif defined(__linux__)
+#define PLATFORM_LINUX
 
 #else
 

@@ -28,6 +28,8 @@
 #ifndef PLOTTER_H
 #define PLOTTER_H
 
+#include <limits>
+
 #include <pangolin/gl/gl.h>
 #include <pangolin/gl/glsl.h>
 #include <pangolin/gl/colour.h>
@@ -65,13 +67,33 @@ struct Marker
     };
 
     Marker(Direction d, float value, Equality leg = Equal, Colour c = Colour() )
-        : direction(d), value(value), leg(leg), colour(c)
+        : colour(c)
+    {
+        if(d == Horizontal) {
+            range.x = Rangef::Open();
+            range.y = Rangef::Containing(value);
+            if(leg == LessThan) {
+                range.y.Insert(std::numeric_limits<float>::lowest() );
+            }else if(leg == GreaterThan) {
+                range.y.Insert(std::numeric_limits<float>::max() );
+            }
+        }else if(d == Vertical) {
+            range.x = Rangef::Containing(value);
+            range.y = Rangef::Open();
+            if(leg == LessThan) {
+                range.x.Insert(std::numeric_limits<float>::lowest() );
+            }else if(leg == GreaterThan) {
+                range.x.Insert(std::numeric_limits<float>::max() );
+            }
+        }
+    }
+
+    Marker(const XYRangef& range, const Colour& c = Colour() )
+        : range(range), colour(c)
     {
     }
 
-    Direction direction;
-    float value;
-    Equality leg;
+    XYRangef range;
     Colour colour;
 };
 
@@ -79,7 +101,7 @@ class PANGOLIN_EXPORT Plotter : public View, Handler
 {
 public:
     Plotter(
-        DataLog* log,
+        DataLog* default_log,
         float left=0, float right=600, float bottom=-1, float top=1,
         float tickx=30, float ticky=0.5,
         Plotter* linked_plotter_x = 0,
@@ -137,7 +159,7 @@ public:
     ///    e.g. x_exptr ="$i", y_expr = "sqrt($1)} // index - sqrt(data[0]) plot
     void AddSeries(const std::string& x_expr, const std::string& y_expr,
         DrawingMode drawing_mode = DrawingModeLine, Colour colour = Colour::Unspecified(),
-        const std::string &title = "$y"
+        const std::string &title = "$y", DataLog* log = nullptr
     );
 
     /// Remove all current markers
@@ -149,6 +171,8 @@ public:
         Marker::Direction d, float value,
         Marker::Equality leg = Marker::Equal, Colour c = Colour()
     );
+
+    Marker& AddMarker( const Marker& marker );
 
     void ClearImplicitPlots();
     void AddImplicitPlot();
@@ -180,6 +204,7 @@ protected:
         GlText title;
         bool contains_id;
         std::vector<PlotAttrib> attribs;
+        DataLog* log;
         GLenum drawing_mode;
         Colour colour;
         bool used;
@@ -206,7 +231,7 @@ protected:
     void UpdateView();
     Tick FindTickFactor(float tick);
 
-    DataLog* log;
+    DataLog* default_log;
 
     ColourWheel colour_wheel;
     Colour colour_bg;

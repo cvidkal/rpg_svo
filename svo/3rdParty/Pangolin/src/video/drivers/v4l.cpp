@@ -26,26 +26,28 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <pangolin/factory/factory_registry.h>
 #include <pangolin/video/drivers/v4l.h>
+#include <pangolin/video/iostream_operators.h>
 
+#include <assert.h>
 #include <iostream>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <string.h>
-#include <assert.h>
 
-#include <fcntl.h>
-#include <unistd.h>
 #include <errno.h>
-#include <malloc.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/uvcvideo.h>
+#include <fcntl.h>
 #include <linux/usb/video.h>
+#include <linux/uvcvideo.h>
+#include <malloc.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define CLEAR(x) memset (&(x), 0, sizeof (x))
 
@@ -103,7 +105,7 @@ size_t V4lVideo::SizeBytes() const
     return image_size;
 }
 
-bool V4lVideo::GrabNext( unsigned char* image, bool wait )
+bool V4lVideo::GrabNext( unsigned char* image, bool /*wait*/ )
 {
     for (;;) {
         fd_set fds;
@@ -368,7 +370,7 @@ void V4lVideo::init_read(unsigned int buffer_size)
     }
 }
 
-void V4lVideo::init_mmap(const char* dev_name)
+void V4lVideo::init_mmap(const char* /*dev_name*/)
 {
     struct v4l2_requestbuffers req;
     
@@ -421,7 +423,7 @@ void V4lVideo::init_mmap(const char* dev_name)
     }
 }
 
-void V4lVideo::init_userp(const char* dev_name, unsigned int buffer_size)
+void V4lVideo::init_userp(const char* /*dev_name*/, unsigned int buffer_size)
 {
     struct v4l2_requestbuffers req;
     unsigned int page_size;
@@ -593,13 +595,15 @@ void V4lVideo::init_device(const char* dev_name, unsigned iwidth, unsigned iheig
         spix="YUYV422";
     }else if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_Y16) {
         spix="GRAY16LE";
+    }else if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_Y10) {
+        spix="GRAY10";
     }else{
         // TODO: Add method to translate from V4L to FFMPEG type.
         std::cerr << "V4L Format " << V4lToString(fmt.fmt.pix.pixelformat)
                   << " not recognised. Defaulting to '" << spix << std::endl;
     }
 
-    const VideoPixelFormat pfmt = VideoFormatFromString(spix);
+    const PixelFormat pfmt = PixelFormatFromString(spix);
     const StreamInfo stream_info(pfmt, width, height, (width*pfmt.bpp)/8, 0);
 
     streams.push_back(stream_info);
@@ -659,6 +663,36 @@ int V4lVideo::IoCtrl(uint8_t unit, uint8_t ctrl, unsigned char* data, int len, U
         return ret;
     }
     return 0;
+}
+
+PANGOLIN_REGISTER_FACTORY(V4lVideo)
+{
+    struct V4lVideoFactory : public FactoryInterface<VideoInterface> {
+        std::unique_ptr<VideoInterface> Open(const Uri& uri) override {
+            const std::string smethod = uri.Get<std::string>("method","mmap");
+            const ImageDim desired_dim = uri.Get<ImageDim>("size", ImageDim(0,0));
+            const int exposure_us = uri.Get<int>("ExposureTime", 10000);
+
+            io_method method = IO_METHOD_MMAP;
+
+            if(smethod == "read" ) {
+                method = IO_METHOD_READ;
+            }else if(smethod == "mmap" ) {
+                method = IO_METHOD_MMAP;
+            }else if(smethod == "userptr" ) {
+                method = IO_METHOD_USERPTR;
+            }
+
+            V4lVideo* video_raw = new V4lVideo(uri.url.c_str(), method, desired_dim.x, desired_dim.y );
+            if(video_raw) {
+                static_cast<V4lVideo*>(video_raw)->SetExposureUs(exposure_us);
+            }
+            return std::unique_ptr<VideoInterface>(video_raw);
+        }
+    };
+
+    auto factory = std::make_shared<V4lVideoFactory>();
+    FactoryRegistry<VideoInterface>::I().RegisterFactory(factory, 10, "v4l");
 }
 
 }

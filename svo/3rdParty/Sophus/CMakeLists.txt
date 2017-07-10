@@ -29,11 +29,10 @@ set( Sophus_INCLUDE_DIR ${PROJECT_SOURCE_DIR} )
 
 ################################################################################
 
-message(${EIGEN3_INCLUDE_DIR})
 #SET (INCLUDE_DIRS "../eigen3.1/")
-find_package( Eigen3 REQUIRED )
-INCLUDE_DIRECTORIES( ${EIGEN3_INCLUDE_DIR} )
-SET( Sophus_INCLUDE_DIR ${Sophus_INCLUDE_DIR} ${EIGEN3_INCLUDE_DIR} )
+find_package( Eigen REQUIRED )
+INCLUDE_DIRECTORIES( ${EIGEN_INCLUDE_DIR} )
+SET( Sophus_INCLUDE_DIR ${Sophus_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} )
 
 SET (SOURCE_DIR "sophus")
 SET (CLASSES  so2

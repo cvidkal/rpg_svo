@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "slamsystem.h"
 #include "VideoSource/VideoSource_Euroc.h"
-#include <yaml-cpp/yaml.h>
 #include <vikit/pinhole_camera.h>
 namespace  slam {
 

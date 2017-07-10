@@ -25,8 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_COMPAT_GLUT_BITMAP_H
-#define PANGOLIN_COMPAT_GLUT_BITMAP_H
+#pragma once
 
 #include <pangolin/gl/glglut.h>
 
@@ -75,7 +74,7 @@ inline void glRasterPos2fv(const GLfloat *v){
 }
 #endif // HAVE_GLES
 
-inline void glutBitmapString(void *font, const unsigned char *str)
+inline void glutBitmapString(void * /*font*/, const unsigned char *str)
 {
 #ifndef HAVE_GLES
     float g_raster_pos[4];
@@ -87,7 +86,7 @@ inline void glutBitmapString(void *font, const unsigned char *str)
     );
 }
 
-inline int glutBitmapLength(void *font, const unsigned char *str)
+inline int glutBitmapLength(void * /*font*/, const unsigned char *str)
 {
     return (int)(pangolin::GlFont::I().Text((const char *)str).Width());
 }
@@ -95,5 +94,3 @@ inline int glutBitmapLength(void *font, const unsigned char *str)
 #define GLUT_BITMAP_HELVETICA_12 0;
 
 #endif // HAVE_GLUT
-
-#endif // PANGOLIN_COMPAT_GLUT_BITMAP_H

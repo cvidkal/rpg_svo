@@ -25,8 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_H
-#define PANGOLIN_H
+#pragma once
 
 #include <pangolin/platform.h>
 
@@ -58,6 +57,7 @@
 
 #ifdef BUILD_PANGOLIN_VIDEO
   #include <pangolin/video/video.h>
+  #include <pangolin/video/video_input.h>
   #include <pangolin/video/video_output.h>
 #endif // BUILD_PANGOLIN_VIDEO
 
@@ -65,6 +65,3 @@
 
 // Let other libraries headers know about Pangolin
 #define HAVE_PANGOLIN
-
-#endif // PANGOLIN_H
-

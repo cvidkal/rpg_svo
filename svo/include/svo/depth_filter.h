@@ -23,6 +23,8 @@
 #include <svo/matcher.h>
 #include <mutex>
 #include <thread>
+#include <condition_variable>
+
 
 namespace slam {
 

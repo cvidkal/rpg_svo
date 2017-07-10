@@ -25,8 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_GLSL_H
-#define PANGOLIN_GLSL_H
+#pragma once
 
 #include <sstream>
 #include <fstream>
@@ -86,10 +85,8 @@ class GlSlProgram
 public:
     GlSlProgram();
 
-#ifdef CALLEE_HAS_RVALREF
     //! Move Constructor
     GlSlProgram(GlSlProgram&& tex);
-#endif
 
     ~GlSlProgram();
     
@@ -137,6 +134,8 @@ public:
     void Unbind();
 
     void BindPangolinDefaultAttribLocationsAndLink();
+
+    GLint ProgramId() { return prog; }
 
 protected:
     std::string ParseIncludeFilename(
@@ -196,7 +195,14 @@ public:
     
 protected:
     static GlSlUtilities& Instance() {
-        static GlSlUtilities instance;
+        // TODO: BUG: The GlSLUtilities instance needs to be tied
+        // to the OpenGL context, not the thread, or globally.
+#ifndef PANGO_NO_THREADLOCAL
+        thread_local
+#else
+        static
+#endif
+        GlSlUtilities instance;
         return instance;
     }
     
@@ -293,15 +299,12 @@ inline GlSlProgram::GlSlProgram()
 {
 }
 
-#ifdef CALLEE_HAS_RVALREF
 //! Move Constructor
 inline GlSlProgram::GlSlProgram(GlSlProgram&& o)
     : linked(o.linked), shaders(o.shaders), prog(o.prog), prev_prog(o.prev_prog)
 {
     o.prog = 0;
 }
-#endif
-
 
 inline GlSlProgram::~GlSlProgram()
 {
@@ -558,5 +561,3 @@ inline void GlSlProgram::SetShaderStorageBlock(const std::string& name, const in
 #endif
 
 }
-
-#endif // PANGOLIN_CG_H

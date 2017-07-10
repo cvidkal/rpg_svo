@@ -25,16 +25,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PANGOLIN_THREADED_WRITE_H
-#define PANGOLIN_THREADED_WRITE_H
+#pragma once
 
 #include <iostream>
 #include <streambuf>
 #include <fstream>
 
-#include <pangolin/compat/thread.h>
-#include <pangolin/compat/mutex.h>
-#include <pangolin/compat/condition_variable.h>
+#include <pangolin/platform.h>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 namespace pangolin
 {
@@ -56,15 +56,15 @@ protected:
     void soft_close();
 
     //! Override streambuf::xsputn for asynchronous write
-    std::streamsize xsputn(const char * s, std::streamsize n) PANGOLIN_OVERRIDE;
+    std::streamsize xsputn(const char * s, std::streamsize n) override;
 
     //! Override streambuf::overflow for asynchronous write
-    int overflow(int c) PANGOLIN_OVERRIDE;
+    int overflow(int c) override;
 
     std::streampos seekoff(
         std::streamoff off, std::ios_base::seekdir way,
         std::ios_base::openmode which = std::ios_base::in | std::ios_base::out
-    ) PANGOLIN_OVERRIDE;
+    ) override;
     
     std::filebuf file;
     char* mem_buffer;
@@ -75,16 +75,13 @@ protected:
 
     std::streampos input_pos;
     
-    boostd::mutex update_mutex;
-    boostd::condition_variable cond_queued;
-    boostd::condition_variable cond_dequeued;
-    boostd::thread write_thread;
+    std::mutex update_mutex;
+    std::condition_variable cond_queued;
+    std::condition_variable cond_dequeued;
+    std::thread write_thread;
 
     bool should_run;
     bool is_pipe;
 };
 
 }
-
-
-#endif // PANGOLIN_THREADED_WRITE_H

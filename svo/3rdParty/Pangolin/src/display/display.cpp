@@ -36,6 +36,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <mutex>
 
 #include <pangolin/gl/glinclude.h>
 #include <pangolin/gl/glglut.h>
@@ -47,7 +48,6 @@
 #include <pangolin/utils/timer.h>
 #include <pangolin/utils/type_convert.h>
 #include <pangolin/image/image_io.h>
-#include <pangolin/compat/mutex.h>
 
 #ifdef BUILD_PANGOLIN_VARS
   #include <pangolin/var/var.h>
@@ -68,11 +68,11 @@ const char* PARAM_SAMPLES        = "SAMPLES";
 const char* PARAM_HIGHRES        = "HIGHRES";
 
 
-typedef std::map<std::string,boostd::shared_ptr<PangolinGl> > ContextMap;
+typedef std::map<std::string,std::shared_ptr<PangolinGl> > ContextMap;
 
 // Map of active contexts
 ContextMap contexts;
-boostd::mutex contexts_mutex;
+std::mutex contexts_mutex;
 
 // Context active for current thread
 __thread PangolinGl* context = 0;
@@ -111,7 +111,7 @@ PangolinGl *FindContext(const std::string& name)
     return context;
 }
 
-void AddNewContext(const std::string& name, boostd::shared_ptr<PangolinGl> newcontext)
+void AddNewContext(const std::string& name, std::shared_ptr<PangolinGl> newcontext)
 {
     // Set defaults
     newcontext->base.left = 0.0;
@@ -182,7 +182,7 @@ WindowInterface& BindToContext(std::string name)
     PangolinGl *context_to_bind = FindContext(name);
     if( !context_to_bind )
     {
-        boostd::shared_ptr<PangolinGl> newcontext(new PangolinGl());
+        std::shared_ptr<PangolinGl> newcontext(new PangolinGl());
         AddNewContext(name, newcontext);
         newcontext->MakeCurrent();
         return *(newcontext.get());
@@ -195,6 +195,13 @@ WindowInterface& BindToContext(std::string name)
 void Quit()
 {
     context->quit = true;
+}
+
+void QuitAll()
+{
+    for(auto nc : contexts) {
+        nc.second->quit = true;
+    }
 }
 
 bool ShouldQuit()
@@ -338,7 +345,7 @@ View& Display(const std::string& name)
     }
 }
 
-void RegisterKeyPressCallback(int key, boostd::function<void(void)> func)
+void RegisterKeyPressCallback(int key, std::function<void(void)> func)
 {
     context->keypress_hooks[key] = func;
 }
@@ -350,18 +357,18 @@ void SaveWindowOnRender(std::string prefix)
 
 void SaveFramebuffer(std::string prefix, const Viewport& v)
 {
+    PANGOLIN_UNUSED(prefix);
+    PANGOLIN_UNUSED(v);
+    
 #ifndef HAVE_GLES
 
 #ifdef HAVE_PNG
-    Image<unsigned char> buffer;
-
-    VideoPixelFormat fmt = VideoFormatFromString("RGBA32");
-    buffer.Alloc(v.w, v.h, v.w * fmt.bpp/8 );
+    PixelFormat fmt = PixelFormatFromString("RGBA32");
+    TypedImage buffer(v.w, v.h, fmt );
     glReadBuffer(GL_BACK);
     glPixelStorei(GL_PACK_ALIGNMENT, 1); // TODO: Avoid this?
     glReadPixels(v.l, v.b, v.w, v.h, GL_RGBA, GL_UNSIGNED_BYTE, buffer.ptr );
     SaveImage(buffer, fmt, prefix + ".png", false);
-    buffer.Dealloc();
 #endif // HAVE_PNG
     
 #endif // HAVE_GLES
@@ -465,7 +472,7 @@ void Mouse( int button_raw, int state, int x, int y)
     
     context->had_input = context->is_double_buffered ? 2 : 1;
     
-    const bool fresh_input = (context->mouse_state == 0);
+    const bool fresh_input = ( (context->mouse_state & 7) == 0);
     
     if( pressed ) {
         context->mouse_state |= (button&7);
